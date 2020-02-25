@@ -22,7 +22,7 @@ env:
   GITHUB_SHA: ${{ github.sha }}
   GKE_ZONE: us-east1-b
   GKE_CLUSTER: urturn-cluster
-  IMAGE: urturn-image:latest
+  IMAGE: urturn-image
   REGISTRY_HOSTNAME: gcr.io
   DEPLOYMENT_NAME: urturn-deployment
 
