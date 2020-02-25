@@ -1,6 +1,5 @@
-# build
-dist
-
-# node
+Dockerfile
+README.md
 node_modules
 npm-debug.log
+kube
