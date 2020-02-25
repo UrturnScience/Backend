@@ -1,0 +1,19 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: urturn-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: urturn
+  template:
+    metadata:
+      labels:
+        app: urturn  
+    spec:                  
+      containers: 
+      - name: urturn-app
+        image: gcr.io/urturn-1/urturn-image:latest
+        ports:
+        - containerPort: 3000
