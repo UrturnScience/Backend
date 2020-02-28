@@ -17,7 +17,7 @@ function setupDB() {
   }
 
   return mongoose.connect(
-    `mongodb://${process.env.MONGODB_HOST}/${process.env.MONGODB_NAME}`,
+    `mongodb://${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}`,
     options
   );
 }
