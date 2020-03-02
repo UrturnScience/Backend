@@ -12,11 +12,6 @@ setupDB().then(() => {
   console.log("Connected to Database");
 });
 
-app.get("/", (req, res) => {
-  throw new Error("this is a random error");
-  res.send("Hello World! This app was deployed automatically.");
-});
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
