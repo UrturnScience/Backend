@@ -16,12 +16,9 @@ function setupDB() {
     };
   }
 
-  if(process.env.MONGODB_CONNECT_STRING)
-  {
-    return mongoose.connect(process.env.MONGODB_CONNECT_STRING);
-  }
-  else
-  {
+  if (process.env.MONGODB_CONNECT_STRING) {
+    return mongoose.connect(process.env.MONGODB_CONNECT_STRING, options);
+  } else {
     return mongoose.connect(
       `mongodb://${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}`,
       options

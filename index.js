@@ -3,7 +3,7 @@ require("dotenv").config();
 const { setupDB } = require("./src/services/dbSetup");
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 
@@ -16,9 +16,9 @@ app.get("/", (req, res) =>
 );
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
-var userRoutes = require("./routes/user.route");
+var userRoutes = require("./src/routes/user.route");
 app.use("/user", userRoutes);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
