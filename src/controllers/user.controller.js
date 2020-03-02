@@ -10,7 +10,17 @@ exports.create = function(req, res) {
     if (err) {
       res.status(500).send("Error");
     } else {
-      res.status(200).send("User created successfully");
+      res.status(200).send("User created successfully: " + user.id);
+    }
+  });
+};
+
+exports.show_all = function(req, res) {
+  User.find({}, (err, users) => {
+    if (err) {
+      res.status(500).send("Error hello");
+    } else {
+      res.status(200).send(users);
     }
   });
 };
