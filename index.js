@@ -4,8 +4,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const errorMiddleware = require("./src/errorHandling");
 const bodyParser = require("body-parser");
-const { setupDB } = require("./src/services/dbSetup");
 
+const { setupDB } = require("./src/services/dbSetup");
 const roomRoutes = require("./src/routes/room.route");
 const userRoutes = require("./src/routes/user.route");
 
