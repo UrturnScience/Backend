@@ -1,8 +1,8 @@
-const room = require("../models/room.model");
+const Room = require("../models/room.model");
 
 exports.create = function(req, res) {
-  const room = new room({
-    active: true
+  const room = new Room({
+    active: req.body.active
   });
 
   room.save(function(err) {
@@ -17,7 +17,7 @@ exports.create = function(req, res) {
 exports.show_all = function(req, res) {
   Room.find({}, (err, rooms) => {
     if (err) {
-      res.status(500).send("Error hello");
+      res.status(500).send("Error");
     } else {
       res.status(200).send(rooms);
     }
@@ -25,7 +25,7 @@ exports.show_all = function(req, res) {
 };
 
 exports.details = function(req, res) {
-  room.findById(req.params.id, (err, room) => {
+  Room.findById(req.params.id, (err, room) => {
     if (err) {
       res.status(500).send("Error");
     } else {
@@ -35,13 +35,18 @@ exports.details = function(req, res) {
 };
 
 exports.update = function(req, res) {
-  Room.findByIdAndUpdate(req.params.id, { $set: req.body }, (err, room) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(room);
+  Room.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body },
+    { new: true },
+    (err, room) => {
+      if (err) {
+        res.status(500).send("Error");
+      } else {
+        res.status(200).send(room);
+      }
     }
-  });
+  );
 };
 
 exports.delete = function(req, res) {
