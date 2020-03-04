@@ -1,4 +1,5 @@
 const Room = require("../models/room.model");
+const User = require("../models/user.model");
 
 exports.create = function(req, res) {
   const room = new Room({
@@ -58,3 +59,15 @@ exports.delete = function(req, res) {
     }
   });
 };
+
+exports.add_user = async function(req, res) {
+  const room = await Room.findById(req.params.rid);
+  console.log(1);
+  const user = await User.findById(req.params.uid);
+  console.log(2);
+  await room.addUser(user._id);
+  console.log(3);
+  await user.addRoom(room._id);
+  console.log(4);
+  res.status(200).send("Complete");
+}
