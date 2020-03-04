@@ -13,6 +13,9 @@ router.put("/:id/update", room_controller.update);
 
 router.delete("/:id/delete", room_controller.delete);
 
-router.put("/:rid/addUser/:uid", room_controller.add_user)
+router.delete("/:rid/removeUser/:uid", room_controller.remove_user);
+
+router.put("/:rid/addUser/:uid", room_controller.add_user);
+
 
 module.exports = router;

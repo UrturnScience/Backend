@@ -62,12 +62,18 @@ exports.delete = function(req, res) {
 
 exports.add_user = async function(req, res) {
   const room = await Room.findById(req.params.rid);
-  console.log(1);
   const user = await User.findById(req.params.uid);
-  console.log(2);
+
   await room.addUser(user._id);
-  console.log(3);
   await user.addRoom(room._id);
-  console.log(4);
   res.status(200).send("Complete");
+}
+
+exports.remove_user = async function(req, res){
+  const [room, user] = await Promise.all([Room.findById(req.params.rid), User.findById(req.params.uid)]);
+  console.log(1);
+  await room.removeUser(user._id);
+  await user.removeRoom(room._id);
+  console.log(2);
+  res.status(200).send("Removed user from room");
 }
