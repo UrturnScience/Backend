@@ -7,42 +7,49 @@ exports.create = async function(req, res) {
   });
 
   await room.save();
-  res.status(200).send("Room created successfully: " + room.id);
+  res.status(200).json({ _id: room.id });
 };
 
 exports.show_all = async function(req, res) {
   const rooms = await Room.find({});
-  res.status(200).send(rooms);
+  res.status(200).json({ rooms });
 };
 
 exports.details = async function(req, res) {
-  constroom = await Room.findOne({ _id: req.params.id });
-  res.status(200).send(room);
+  const room = await Room.findOne({ _id: req.params.id });
+  res.status(200).json({ room });
 };
 
 exports.update = async function(req, res) {
-  const room = await Room.findOneAndUpdate({ _id: req.params.id },{ $set: req.body }, {new: true});
-  res.status(200).send(room);
+  const room = await Room.findOneAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body },
+    { new: true }
+  );
+  res.status(200).json({ room });
 };
 
 exports.delete = async function(req, res) {
   await Room.findByIdAndDelete(req.params.id);
-  res.status(200).json({_id: req.params.id});
+  res.status(200).json({ _id: req.params.id });
 };
 
 exports.add_user = async function(req, res) {
-  const [room, user] = await Promise.all([Room.findOne({_id:req.params.rid}), User.findOne({_id:req.params.uid})]);
+  const [room, user] = await Promise.all([
+    Room.findOne({ _id: req.params.rid }),
+    User.findOne({ _id: req.params.uid })
+  ]);
 
-  await room.addUser(user._id);
-  await user.addRoom(room._id);
-
+  await Promise.all([room.addUser(user._id), user.addRoom(room._id)]);
   res.sendStatus(200);
-}
+};
 
-exports.remove_user = async function(req, res){
-  const [room, user] = await Promise.all([Room.findOne({_id:req.params.rid}), User.findOne({_id:req.params.uid})]);
+exports.remove_user = async function(req, res) {
+  const [room, user] = await Promise.all([
+    Room.findOne({ _id: req.params.rid }),
+    User.findOne({ _id: req.params.uid })
+  ]);
 
-  await room.removeUser(user._id);
-  await user.removeRoom(room._id);
+  await Promise.all([room.removeUser(user._id), user.removeRoom(room._id)]);
   res.sendStatus(200);
-}
+};
