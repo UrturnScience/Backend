@@ -27,5 +27,5 @@ exports.update = async function(req, res) {
 
 exports.delete = async function(req, res) {
   await User.findByIdAndDelete(req.params.id);
-  res.status(200).json({ _id: req.params.id });
+  res.sendStatus(200);
 };
