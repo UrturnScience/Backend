@@ -1,56 +1,31 @@
 const User = require("../models/user.model");
 
-exports.create = function(req, res) {
+exports.create = async function(req, res) {
   const user = new User({
     username: req.body.username,
     password: req.body.password
   });
 
-  user.save(function(err) {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send("User created successfully: " + user.id);
-    }
-  });
+  await user.save();
+  res.status(200).send("User created successfully: " + user.id);
 };
 
-exports.show_all = function(req, res) {
-  User.find({}, (err, users) => {
-    if (err) {
-      res.status(500).send("Error hello");
-    } else {
-      res.status(200).send(users);
-    }
-  });
+exports.show_all = async function(req, res) {
+  const users = await User.find({});
+  res.status(200).send(users);
 };
 
-exports.details = function(req, res) {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(user);
-    }
-  });
+exports.details = async function(req, res) {
+  const user = await User.findById(req.params.id);
+  res.status(200).send(user);
 };
 
-exports.update = function(req, res) {
-  User.findByIdAndUpdate(req.params.id, { $set: req.body }, (err, user) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(user);
-    }
-  });
+exports.update = async function(req, res) {
+  const user = await User.findByIdAndUpdate(req.params.id, { $set: req.body });
+  res.status(200).send(user);
 };
 
-exports.delete = function(req, res) {
-  User.findByIdAndDelete(req.params.id, err => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send("User Deleted with ID:" + req.params.id);
-    }
-  });
+exports.delete = async function(req, res) {
+  await User.findByIdAndDelete(req.params.id);
+  res.status(200).send("User Deleted with ID:" + req.params.id);
 };

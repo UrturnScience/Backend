@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("express-async-errors")
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -20,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/user", userRoutes);
-app.use("/room", roomRoutes)
+app.use("/room", roomRoutes);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(errorMiddleware.handleExpressError);
