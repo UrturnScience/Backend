@@ -1,28 +1,19 @@
 const User = require("../models/user.model");
 
-exports.create = function(req, res) {
+exports.create = async function(req, res) {
   const user = new User({
     username: req.body.username,
     password: req.body.password
   });
 
-  user.save(function(err) {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send("User created successfully: " + user.id);
-    }
-  });
+  await user.save();
+  res.status(200).send("User created successfully: " + user.id);
 };
 
-exports.show_all = function(req, res) {
-  User.find({}, (err, users) => {
-    if (err) {
-      res.status(500).send("Error hello");
-    } else {
-      res.status(200).send(users);
-    }
-  });
+exports.show_all = async function(req, res) {
+  throw Error('random error lol')
+  const users = await User.find({});
+  res.status(200).send(users);
 };
 
 exports.details = function(req, res) {
