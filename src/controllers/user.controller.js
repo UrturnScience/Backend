@@ -11,37 +11,21 @@ exports.create = async function(req, res) {
 };
 
 exports.show_all = async function(req, res) {
-  throw Error('random error lol')
   const users = await User.find({});
   res.status(200).send(users);
 };
 
-exports.details = function(req, res) {
-  User.findById(req.params.id, (err, user) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(user);
-    }
-  });
+exports.details = async function(req, res) {
+  const user = await User.findById(req.params.id);
+  res.status(200).send(user);
 };
 
-exports.update = function(req, res) {
-  User.findByIdAndUpdate(req.params.id, { $set: req.body }, (err, user) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(user);
-    }
-  });
+exports.update = async function(req, res) {
+  const user = await User.findByIdAndUpdate(req.params.id, { $set: req.body });
+  res.status(200).send(user);
 };
 
-exports.delete = function(req, res) {
-  User.findByIdAndDelete(req.params.id, err => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send("User Deleted with ID:" + req.params.id);
-    }
-  });
+exports.delete = async function(req, res) {
+  await User.findByIdAndDelete(req.params.id);
+  res.status(200).send("User Deleted with ID:" + req.params.id);
 };
