@@ -30,8 +30,8 @@ exports.update = async function(req, res) {
 };
 
 exports.delete = async function(req, res) {
-  await Room.findByIdAndDelete(req.params.id);
-  res.status(200).json({ _id: req.params.id });
+  await Room.findOneAndDelete({ _id: req.params.id });
+  res.sendStatus(200);
 };
 
 exports.add_user = async function(req, res) {
