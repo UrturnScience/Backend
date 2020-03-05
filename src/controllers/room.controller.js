@@ -1,60 +1,55 @@
 const Room = require("../models/room.model");
+const User = require("../models/user.model");
 
-exports.create = function(req, res) {
+exports.create = async function(req, res) {
   const room = new Room({
     active: req.body.active
   });
 
-  room.save(function(err) {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send("Room created successfully: " + room.id);
-    }
-  });
+  await room.save();
+  res.status(200).json({ _id: room.id });
 };
 
-exports.show_all = function(req, res) {
-  Room.find({}, (err, rooms) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(rooms);
-    }
-  });
+exports.show_all = async function(req, res) {
+  const rooms = await Room.find({});
+  res.status(200).json({ rooms });
 };
 
-exports.details = function(req, res) {
-  Room.findById(req.params.id, (err, room) => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send(room);
-    }
-  });
+exports.details = async function(req, res) {
+  const room = await Room.findOne({ _id: req.params.id });
+  res.status(200).json({ room });
 };
 
-exports.update = function(req, res) {
-  Room.findOneAndUpdate(
+exports.update = async function(req, res) {
+  const room = await Room.findOneAndUpdate(
     { _id: req.params.id },
     { $set: req.body },
-    { new: true },
-    (err, room) => {
-      if (err) {
-        res.status(500).send("Error");
-      } else {
-        res.status(200).send(room);
-      }
-    }
+    { new: true }
   );
+  res.status(200).json({ room });
 };
 
-exports.delete = function(req, res) {
-  Room.findByIdAndDelete(req.params.id, err => {
-    if (err) {
-      res.status(500).send("Error");
-    } else {
-      res.status(200).send("room Deleted with ID:" + req.params.id);
-    }
-  });
+exports.delete = async function(req, res) {
+  await Room.findOneAndDelete({ _id: req.params.id });
+  res.sendStatus(200);
+};
+
+exports.add_user = async function(req, res) {
+  const [room, user] = await Promise.all([
+    Room.findOne({ _id: req.params.rid }),
+    User.findOne({ _id: req.params.uid })
+  ]);
+
+  await Promise.all([room.addUser(user._id), user.addRoom(room._id)]);
+  res.sendStatus(200);
+};
+
+exports.remove_user = async function(req, res) {
+  const [room, user] = await Promise.all([
+    Room.findOne({ _id: req.params.rid }),
+    User.findOne({ _id: req.params.uid })
+  ]);
+
+  await Promise.all([room.removeUser(user._id), user.removeRoom(room._id)]);
+  res.sendStatus(200);
 };
