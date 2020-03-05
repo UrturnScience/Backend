@@ -1,5 +1,5 @@
 require("dotenv").config();
-require("express-async-errors")
+require("express-async-errors");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -14,7 +14,9 @@ const app = express();
 const port = 3000;
 
 setupDB().then(() => {
-  console.log("Connected to Database");
+  console.log(
+    `Connected to DB! (user: ${mongoose.connection.user}, host: ${mongoose.connection.host}:${mongoose.connection.port}/${mongoose.connection.name})`
+  );
 });
 
 app.use(bodyParser.json());
