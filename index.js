@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const { setupDB } = require("./src/services/dbSetup");
 const roomRoutes = require("./src/routes/room.route");
 const userRoutes = require("./src/routes/user.route");
+const roomUserRoutes = require("./src/routes/room_user.route");
 
 const app = express();
 const port = 3000;
