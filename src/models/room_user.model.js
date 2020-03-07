@@ -6,10 +6,14 @@ let RoomUserSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, required: true, ref: "User"}
 });
 
-RoomUserSchema.index({room_id: 1, user_id: 1}, {unique: true}); //compound unique index
+RoomUserSchema.index({roomId: 1, userId: 1}, {unique: true}); //compound unique index
 
 RoomUserSchema.statics.findByRoomId = async function(roomId){
-    return await this.model.find({roomId: roomId});
+    return await this.find({roomId: roomId});
+}
+
+RoomUserSchema.statics.findByUserId = async function(userId){
+  return await this.find({userId: userId});
 }
 
 
