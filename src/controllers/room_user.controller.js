@@ -1,6 +1,6 @@
 const Room = require("../models/room.model");
 const User = require("../models/user.model");
-const RoomUser = require("../model/room_user.model");
+const RoomUser = require("../models/room_user.model");
 
 exports.show_all = async function(req, res){
     const roomUsers = await RoomUser.find({});
