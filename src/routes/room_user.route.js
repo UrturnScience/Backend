@@ -7,9 +7,9 @@ router.get("/all", room_user_controller.show_all);
 
 router.post("/add/:rid/:uid", room_user_controller.add_user);
 
-router.delete("/delete/:rid/:uid", room_user_controller.remove_user)
+router.delete("/delete/:rid/:uid", room_user_controller.remove_user);
 
-route.get("/:rid", room_user_controller.show_room)
+route.get("/:rid", room_user_controller.show_room);
 
 
 
