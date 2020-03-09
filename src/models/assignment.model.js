@@ -7,5 +7,6 @@ let AssignmentSchema = new Schema({
   choreId: {type: Schema.Types.ObjectId, ref: "Chore"}
 });
 
+AssignmentSchema.index({ choreId: 1, userId: 1 }, { unique: true }); //compound unique index
 
 module.exports = mongoose.model("Assignment", AssignmentSchema);
