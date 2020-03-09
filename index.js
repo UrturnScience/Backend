@@ -10,6 +10,7 @@ const { setupDB } = require("./src/services/dbSetup");
 const roomRoutes = require("./src/routes/room.route");
 const userRoutes = require("./src/routes/user.route");
 const choreRoutes = require("./src/routes/chore.route");
+const assignmentRoutes = require("./src/routes/assignment.route");
 
 const app = express();
 const port = 3000;
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", userRoutes);
 app.use("/room", roomRoutes);
 app.use("/chore", choreRoutes);
+app.use("/assignment", assignmentRoutes);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(errorMiddleware.handleExpressError);
