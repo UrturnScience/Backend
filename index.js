@@ -32,6 +32,7 @@ app.use("/chore", choreRoutes);
 app.use("/assignment", assignmentRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
+app.use("/roomuser", roomUserRoutes);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(errorMiddleware.handleExpressError);
