@@ -33,23 +33,3 @@ exports.delete = async function(req, res) {
   await Room.findOneAndDelete({ _id: req.params.id });
   res.sendStatus(200);
 };
-
-exports.add_user = async function(req, res) {
-  const [room, user] = await Promise.all([
-    Room.findOne({ _id: req.params.rid }),
-    User.findOne({ _id: req.params.uid })
-  ]);
-
-  await Promise.all([room.addUser(user._id), user.addRoom(room._id)]);
-  res.sendStatus(200);
-};
-
-exports.remove_user = async function(req, res) {
-  const [room, user] = await Promise.all([
-    Room.findOne({ _id: req.params.rid }),
-    User.findOne({ _id: req.params.uid })
-  ]);
-
-  await Promise.all([room.removeUser(user._id), user.removeRoom(room._id)]);
-  res.sendStatus(200);
-};
