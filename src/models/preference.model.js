@@ -14,7 +14,6 @@ PreferenceSchema.statics.findByRoomId = async function(roomId) {
   const chores = await Chore.find({ roomId: roomId });
   let choreIds = []; //get the userIds contained within the room
   for (var i = 0; i < chores.length; i++) {
-    console.log(chores[i]);
     choreIds.push(chores[i].get("_id"));
   }
 
