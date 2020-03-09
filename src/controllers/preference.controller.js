@@ -21,7 +21,7 @@ exports.update = async function(req, res) {
 };
 
 exports.delete = async function(req, res) {
-  await Preference.findByIdAndDelete(req.params.id);
+  await Preference.findOneAndDelete(req.params.id);
   res.sendStatus(200);
 };
 
