@@ -30,6 +30,6 @@ exports.update = async function(req, res) {
 };
 
 exports.delete = async function(req, res) {
-  await Assignment.findByIdAndDelete(req.params.id);
+  await Assignment.findOneAndDelete(req.params.id);
   res.sendStatus(200);
 };
