@@ -7,7 +7,6 @@ function Login({ onLogin, onCreateAccount}) {
 
   return (
     <View>
-      <Text>login:</Text>
       <TextInput
         style={{ height: 40, borderColor: "gray", borderWidth: 1}}
         onChangeText={text => setEmailInput(text)}
