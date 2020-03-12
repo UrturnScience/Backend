@@ -6,7 +6,7 @@ const Chore = require("../models/chore.model");
 const RoomUserService = require("./room_user.service");
 const ChoreService = require("./chore.service");
 
-exports.getUsersIdsByRoomId = async function(roomId) {
+exports.getUserIdsByRoomId = async function(roomId) {
   roomUsers = await RoomUser.find({ roomId: roomId });
   userIds = [];
   for (var i = 0; i < roomUsers.length; i++) {
