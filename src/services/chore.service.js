@@ -1,5 +1,6 @@
 const Chore = require("../models/chore.model");
 const Preference = require("../models/preference.model");
+const Assignment = require("../models/assignment.model");
 
 const RoomService = require("./room.service");
 
@@ -44,4 +45,17 @@ exports.getChoreIdsByRoomId = async function(roomId){
     choreIds.push(chores[i].get("_id"));
   }
   return choreIds;
+}
+
+exports.deleteChoreAndReferences = async function(choreId){
+  //Delete Chore, Assignments of that chore, preferences of that chores
+
+  //Preference
+  await Preference.deleteMany({choreId: choreId});
+
+  //Assignment
+  await Assignment.deleteMany({choreId: choreId});
+  
+  //Chore
+  await Chore.deleteOne({_id: choreId});
 }

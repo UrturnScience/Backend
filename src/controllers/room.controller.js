@@ -1,6 +1,8 @@
 const Room = require("../models/room.model");
 const User = require("../models/user.model");
 
+const RoomService = require("../services/room.service");
+
 exports.create = async function(req, res) {
   const room = new Room({
     active: req.body.active
@@ -30,6 +32,6 @@ exports.update = async function(req, res) {
 };
 
 exports.delete = async function(req, res) {
-  await Room.findOneAndDelete({ _id: req.params.id });
+  await RoomService.deleteRoomAndReferences(req.params.id);
   res.sendStatus(200);
 };

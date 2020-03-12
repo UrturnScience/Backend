@@ -34,3 +34,7 @@ exports.createRoomUserAndPreferences = async function(body) {
 
   return objects;
 };
+
+exports.deleteRoomUsersByRoomId = async function(roomId){
+  await RoomUser.deleteMany({roomId: roomId});
+}
