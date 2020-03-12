@@ -34,10 +34,10 @@ exports.createRoomUserAndPreferences = async function(body) {
   return objects;
 };
 
-exports.getRoomIdByUserId = async function(userId){
-  const roomUser = await RoomUser.findOne({userId: userId});
+exports.getRoomIdByUserId = async function(userId) {
+  const roomUser = await RoomUser.findOne({ userId: userId });
   return roomUser.get("roomId");
-}
+};
 
 exports.deleteRoomUsersByRoomId = async function(roomId) {
   await RoomUser.deleteMany({ roomId: roomId });

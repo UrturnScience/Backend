@@ -13,5 +13,4 @@ router.put("/update/:id", room_controller.update);
 
 router.delete("/delete/:id", room_controller.delete);
 
-
 module.exports = router;

@@ -8,5 +8,5 @@ const ChoreService = require("./chore.service");
 
 exports.deleteUserAndReferences = async function(userId) {
   await RoomUserService.removeUserFromRoomAndDeleteReferences(userId);
-  await User.deleteOne({_id: userId});
+  await User.deleteOne({ _id: userId });
 };

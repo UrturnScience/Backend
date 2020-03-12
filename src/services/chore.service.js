@@ -5,7 +5,7 @@ const Assignment = require("../models/assignment.model");
 const RoomService = require("./room.service");
 
 exports.createChoreAndPreferences = async function(body) {
-    let objects = {};
+  let objects = {};
 
   //Create chore
   const chore = new Chore({
@@ -14,7 +14,7 @@ exports.createChoreAndPreferences = async function(body) {
     time: body.time,
     recurring: body.recurring
   });
-  
+
   await chore.save();
   objects["chore"] = chore;
 
@@ -23,11 +23,10 @@ exports.createChoreAndPreferences = async function(body) {
 
   objects["preferences"] = [];
   //create preferences for chore
-  for(var i = 0; i < userIds.length; ++i)
-  {
+  for (var i = 0; i < userIds.length; ++i) {
     const preference = new Preference({
-        choreId: chore.id,
-        userId: userIds[i]
+      choreId: chore.id,
+      userId: userIds[i]
     });
     await preference.save();
     objects["preferences"].push(preference);
@@ -36,24 +35,24 @@ exports.createChoreAndPreferences = async function(body) {
   return objects;
 };
 
-exports.getChoreIdsByRoomId = async function(roomId){
+exports.getChoreIdsByRoomId = async function(roomId) {
   chores = await Chore.find({ roomId: roomId });
   choreIds = [];
   for (var i = 0; i < chores.length; i++) {
     await choreIds.push(chores[i].get("_id"));
   }
   return await choreIds;
-}
+};
 
-exports.deleteChoreAndReferences = async function(choreId){
+exports.deleteChoreAndReferences = async function(choreId) {
   //Delete Chore, Assignments of that chore, preferences of that chores
 
   //Preference
-  await Preference.deleteMany({choreId: choreId});
+  await Preference.deleteMany({ choreId: choreId });
 
   //Assignment
-  await Assignment.deleteMany({choreId: choreId});
-  
+  await Assignment.deleteMany({ choreId: choreId });
+
   //Chore
-  await Chore.deleteOne({_id: choreId});
-}
+  await Chore.deleteOne({ _id: choreId });
+};

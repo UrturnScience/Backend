@@ -15,7 +15,7 @@ exports.getUserIdsByRoomId = async function(roomId) {
   return userIds;
 };
 
-exports.deleteRoomAndReferences = async function(roomId){
+exports.deleteRoomAndReferences = async function(roomId) {
   //Delete room, roomusers for that room, and chores for that room
 
   //Delete roomusers attached to the room
@@ -29,4 +29,4 @@ exports.deleteRoomAndReferences = async function(roomId){
 
   //Delete room
   await Room.deleteOne({ _id: roomId });
-}
+};

@@ -6,5 +6,4 @@ let UserSchema = new Schema({
   password: { type: String, required: true, max: 25 }
 });
 
-
 module.exports = mongoose.model("User", UserSchema);
