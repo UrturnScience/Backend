@@ -1,4 +1,4 @@
-package com.mobile_app;
+package com.messaging;
 
 import com.facebook.react.ReactActivity;
 

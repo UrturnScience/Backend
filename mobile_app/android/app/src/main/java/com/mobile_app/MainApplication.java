@@ -1,4 +1,4 @@
-package com.mobile_app;
+package com.messaging;
 
 import android.app.Application;
 import android.content.Context;
