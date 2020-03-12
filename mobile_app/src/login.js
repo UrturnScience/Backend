@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 
 function Login({ onLogin, onCreateAccount}) {
-  const [usernameInput, setUsernameInput] = useState("Username");
+  const [emailInput, setEmailInput] = useState("Email");
   const [passwordInput, setPasswordInput] = useState("Password");
 
   return (
@@ -10,8 +10,8 @@ function Login({ onLogin, onCreateAccount}) {
       <Text>login:</Text>
       <TextInput
         style={{ height: 40, borderColor: "gray", borderWidth: 1}}
-        onChangeText={text => setUsernameInput(text)}
-        value={usernameInput}
+        onChangeText={text => setEmailInput(text)}
+        value={emailInput}
       />
       <TextInput
         style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
@@ -21,13 +21,13 @@ function Login({ onLogin, onCreateAccount}) {
       <Button
         title="login"
         onPress={() => {
-          onLogin(usernameInput, passwordInput);
+          onLogin(emailInput, passwordInput);
         }}
       />
       <Button
         title="create account"
         onPress={() => {
-          onCreateAccount(usernameInput, passwordInput);
+          onCreateAccount(emailInput, passwordInput);
         }}
       />      
     </View>

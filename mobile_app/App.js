@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput } from "react-native";
+import { Button, View, Text, TextInput } from "react-native";
 import Login from "./src/login";
 import auth from "@react-native-firebase/auth";
 
@@ -7,8 +7,7 @@ function App() {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-
-  const [value, onChangeText] = useState("Useless Multiline Placeholder");
+  const [errorNotif, setErrorNotif] = useState();
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -17,13 +16,22 @@ function App() {
   }
 
   // Handle login attempt
-  function onLogin(username, password){
-    console.log(username, password)
+  async function onLogin(email, password) {
+    try {
+      await auth().signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      setErrorNotif(error.message);
+    }
   }
 
   // Handle creating new account
-  function onCreateAccount(username, password){
-    console.log(username, password)
+  function onCreateAccount(email, password) {
+    auth().createUserWithEmailAndPassword(email, password);
+  }
+
+  // Loggin out
+  function onLogout() {
+    auth().signOut();
   }
 
   useEffect(() => {
@@ -36,7 +44,8 @@ function App() {
   if (!user) {
     return (
       <View>
-        <Login {...{onLogin, onCreateAccount}}/>
+        <Login {...{ onLogin, onCreateAccount }} />
+        {errorNotif && <Text>{errorNotif}</Text>}
       </View>
     );
   }
@@ -44,6 +53,7 @@ function App() {
   return (
     <View>
       <Text>Welcome {user.email}</Text>
+      <Button title="logout" onPress={onLogout} />
     </View>
   );
 }
