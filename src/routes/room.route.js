@@ -9,9 +9,9 @@ router.post("/create", room_controller.create);
 
 router.get("/:id", room_controller.details);
 
-router.put("/:id/update", room_controller.update);
+router.put("/update/:id", room_controller.update);
 
-router.delete("/:id/delete", room_controller.delete);
+router.delete("/delete/:id", room_controller.delete);
 
 
 module.exports = router;

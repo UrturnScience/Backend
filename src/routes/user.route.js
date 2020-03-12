@@ -9,9 +9,9 @@ router.post("/create", user_controller.create);
 
 router.get("/:id", user_controller.details);
 
-router.put("/:id/update", user_controller.update);
+router.put("/update/:id", user_controller.update);
 
-router.delete("/:id/delete", user_controller.delete);
+router.delete("/delete/:id", user_controller.delete);
 
 
 module.exports = router;

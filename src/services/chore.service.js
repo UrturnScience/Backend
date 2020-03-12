@@ -19,8 +19,7 @@ exports.createChoreAndPreferences = async function(body) {
   objects["chore"] = chore;
 
   //Get users in the room that the chore was created for
-  userIds = await RoomService.getUsersForRoom(chore.roomId);
-  console.log(userIds);
+  userIds = await RoomService.getUserIdsByRoomId(chore.roomId);
 
   objects["preferences"] = [];
   //create preferences for chore
@@ -31,7 +30,6 @@ exports.createChoreAndPreferences = async function(body) {
         userId: userIds[i]
     });
     await preference.save();
-    console.log(preference);
     objects["preferences"].push(preference);
   }
 
