@@ -22,12 +22,11 @@ exports.deleteRoomAndReferences = async function(roomId){
   await RoomUserService.deleteRoomUsersByRoomId(roomId);
 
   //Delete chores belonging to that room
-  const chores = await Chore.find({ roomId: roomId });
-  let choreIds = []; //get the userIds contained within the room
-  for (var i = 0; i < chores.length; i++) {
-    await ChoreService.deleteChoreAndReferences(chores[i].get("_id"));
+  const choreIds = await ChoreService.getChoreIdsByRoomId(roomId);
+  for (var i = 0; i < choreIds.length; i++) {
+    await ChoreService.deleteChoreAndReferences(choreIds[i]);
   }
 
   //Delete room
-  await Room.findOneAndDelete({ _id: roomId });
+  await Room.deleteOne({ _id: roomId });
 }

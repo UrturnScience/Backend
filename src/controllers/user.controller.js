@@ -1,5 +1,7 @@
 const User = require("../models/user.model");
 
+const UserService = require("../services/user.service");
+
 exports.create = async function(req, res) {
   const user = new User({
     username: req.body.username,
@@ -26,6 +28,6 @@ exports.update = async function(req, res) {
 };
 
 exports.delete = async function(req, res) {
-  await User.findByIdAndDelete(req.params.id);
+  await UserService.deleteUserAndReferences(req.params.id);
   res.sendStatus(200);
 };

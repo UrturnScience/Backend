@@ -42,9 +42,9 @@ exports.getChoreIdsByRoomId = async function(roomId){
   chores = await Chore.find({ roomId: roomId });
   choreIds = [];
   for (var i = 0; i < chores.length; i++) {
-    choreIds.push(chores[i].get("_id"));
+    await choreIds.push(chores[i].get("_id"));
   }
-  return choreIds;
+  return await choreIds;
 }
 
 exports.deleteChoreAndReferences = async function(choreId){

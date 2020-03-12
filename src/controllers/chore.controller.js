@@ -32,6 +32,6 @@ exports.update = async function(req, res) {
 };
 
 exports.delete = async function(req, res) {
-  await Chore.findByIdAndDelete(req.params.id);
+  await ChoreService.deleteChoreAndReferences(req.params.id);
   res.sendStatus(200);
 };

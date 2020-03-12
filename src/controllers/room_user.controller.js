@@ -15,10 +15,7 @@ exports.add_user = async function(req, res) {
 };
 
 exports.remove_user = async function(req, res) {
-  await RoomUser.findOneAndDelete({
-    roomId: req.params.rid,
-    userId: req.params.uid
-  });
+  await RoomUserService.removeUserFromRoomAndDeleteReferences(req.params.uid);
   res.sendStatus(200);
 };
 
