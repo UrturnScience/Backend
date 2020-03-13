@@ -38,5 +38,9 @@ app.get("/ping", (req, res) => {
   res.status(200).send("Pong");
 });
 
+app.get("/authPing", (req, res) => {
+  res.status(200).send("Pong");
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(errorMiddleware.handleExpressError);
