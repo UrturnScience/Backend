@@ -15,7 +15,7 @@ const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 setupDB().then(() => {
   console.log(
@@ -33,6 +33,10 @@ app.use("/assignment", assignmentRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
 app.use("/roomuser", roomUserRoutes);
+
+app.get("/ping", (req, res) => {
+  res.status(200).send("Pong");
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(errorMiddleware.handleExpressError);

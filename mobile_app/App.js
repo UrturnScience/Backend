@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, View, Text, TextInput } from "react-native";
 import Login from "./src/login";
 import auth from "@react-native-firebase/auth";
+import Axios from "axios";
 
 function App() {
   // Set an initializing state whilst Firebase connects
@@ -34,6 +35,12 @@ function App() {
     auth().signOut();
   }
 
+  // Make ping request
+  async function pingRequest() {
+    const res = await Axios.get("http://localhost:8080/ping");
+    console.log(res.data);
+  }
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -54,6 +61,7 @@ function App() {
     <View>
       <Text>Welcome {user.email}</Text>
       <Button title="logout" onPress={onLogout} />
+      <Button title="ping server" onPress={pingRequest} />
     </View>
   );
 }
