@@ -45,9 +45,14 @@ function App() {
   // sends firebase Id token as JWT
   async function authenticatedRequest() {
     const token = await auth().currentUser.getIdToken();
-    const config = { headers: { Authorization: `Bearer ${token}` } };
-    const res = await Axios.get("http://localhost:8080/authPing", config);
-    console.log(res.data);
+    const config = { headers: { Authorization: token } };
+
+    try {
+      const res = await Axios.get("http://localhost:8080/authPing", config);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
@@ -71,7 +76,10 @@ function App() {
       <Text>Welcome {user.email}</Text>
       <Button title="logout" onPress={onLogout} />
       <Button title="ping server" onPress={pingRequest} />
-      <Button title="authenticated ping server" onPress={authenticatedRequest} />
+      <Button
+        title="authenticated ping server"
+        onPress={authenticatedRequest}
+      />
     </View>
   );
 }

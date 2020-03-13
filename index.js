@@ -5,7 +5,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const errorMiddleware = require("./src/errorHandling");
 const bodyParser = require("body-parser");
+const admin = require("firebase-admin");
 
+require("./src/services/firebaseSetup");
 const { setupDB } = require("./src/services/dbSetup");
 const roomRoutes = require("./src/routes/room.route");
 const userRoutes = require("./src/routes/user.route");
@@ -38,8 +40,12 @@ app.get("/ping", (req, res) => {
   res.status(200).send("Pong");
 });
 
-app.get("/authPing", (req, res) => {
-  res.status(200).send("Pong");
+app.get("/authPing", async (req, res) => {
+  const decodedToken = await admin
+    .auth()
+    .verifyIdToken(req.headers.authorization);
+  const user = await admin.auth().getUser(decodedToken.uid);
+  res.status(200).send(user.email + " just made authenticated ping request!");
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
