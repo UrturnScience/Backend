@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const errorMiddleware = require("./src/errorHandling");
 const bodyParser = require("body-parser");
 
+const { setupSocket } = require("./src/services/socket");
 const { setupDB } = require("./src/services/dbSetup");
 const roomRoutes = require("./src/routes/room.route");
 const userRoutes = require("./src/routes/user.route");
@@ -35,5 +36,9 @@ app.use("/preference", preferenceRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+const server = app.listen(port, () =>
+  console.log(`Example app listening on port ${port}!`)
+);
 app.use(errorMiddleware.handleExpressError);
+
+setupSocket(server);
