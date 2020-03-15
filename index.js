@@ -15,7 +15,6 @@ const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
 
 const app = express();
-const port = 3000;
 
 setupDB().then(() => {
   console.log(
@@ -35,5 +34,5 @@ app.use("/preference", preferenceRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(process.env.NODE_PORT, () => console.log(`Example app listening on port ${process.env.NODE_PORT}!`));
 app.use(errorMiddleware.handleExpressError);
