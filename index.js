@@ -49,3 +49,5 @@ app.use("/preference", preferenceRoutes);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(errorMiddleware.handleExpressError);
+
+module.exports = app;
