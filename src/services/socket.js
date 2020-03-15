@@ -1,5 +1,10 @@
 const WebSocket = require("ws");
 const messaging = require("./messaging");
+const usersSocket = new Map(); // key is UID, value is websocket instance
+
+function getUsersSocket(uid) {
+  return usersSocket.get(uid);
+}
 
 function setupSocket(server) {
   const wss = new WebSocket.Server({ clientTracking: false, noServer: true });
@@ -7,6 +12,7 @@ function setupSocket(server) {
   server.on("upgrade", (request, socket, head) => {
     /**
      * TODO Add Authentication with firebase
+     * setting the session value to user
      * https://github.com/websockets/ws#client-authentication
      */
     function authenticate(req, callback) {
@@ -25,11 +31,15 @@ function setupSocket(server) {
     });
   });
 
-  wss.on("connection", (ws, request) => {
+  wss.on("connection", (ws, request, client) => {
+    const user = request.session.user;
+    ws.user = user;
+    usersSocket.set(user.uid, ws);
+
     messaging.setupMessagingEvents(ws);
 
     ws.on("close", () => {});
   });
 }
 
-module.exports = { setupSocket };
+module.exports = { setupSocket, getUsersSocket };
