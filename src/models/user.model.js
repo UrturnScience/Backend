@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const admin = require("firebase-admin");
 
 const UserSchema = new Schema({
   username: { type: String, required: true, max: 100, unique: true },
@@ -11,5 +12,9 @@ const UserSchema = new Schema({
     index: true
   }
 });
+
+UserSchema.methods.getFirebaseUser = function() {
+  return admin.auth().getUser(this.firebaseId);
+};
 
 module.exports = mongoose.model("User", UserSchema);
