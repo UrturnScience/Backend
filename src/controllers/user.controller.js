@@ -19,7 +19,7 @@ exports.login = async function(req, res) {
 };
 
 exports.logout = async function(req, res) {
-  request.session.destroy(function() {
+  req.session.destroy(function() {
     res.sendStatus(200);
   });
 };

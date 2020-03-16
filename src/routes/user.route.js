@@ -9,7 +9,7 @@ router.post("/create", user_controller.create);
 
 router.post("/login", user_controller.login);
 
-router.delete("/login", user_controller.logout);
+router.delete("/logout", user_controller.logout);
 
 router.get("/:id", user_controller.details);
 

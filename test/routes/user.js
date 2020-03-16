@@ -9,10 +9,15 @@ const {
   setupCurrentUser,
   setupFirebaseClient
 } = require("../util/firebase");
+const { dropDatabase } = require("../util/database");
 const app = require("../../index");
 
-test.before(async t => {
+test.before(t => {
   setupFirebaseClient();
+});
+
+test.after(async t => {
+  await dropDatabase();
 });
 
 test.beforeEach(async t => {
@@ -23,14 +28,29 @@ test.afterEach(async t => {
   await clearUsers();
 });
 
-test.serial("POST user/login should provide session credentials on successful login", async t => {
+test.serial(
+  "POST /user/login should provide session credentials on successful login",
+  async t => {
+    await setupCurrentUser("test@test.com", "password");
+    const token = await firebase.auth().currentUser.getIdToken();
+
+    const res = await request(app)
+      .post("/user/login")
+      .set("Authorization", token)
+      .expect(200);
+
+    t.truthy(res.header["set-cookie"]);
+  }
+);
+
+test.serial("DELETE /user/logout", async t => {
   await setupCurrentUser("test@test.com", "password");
   const token = await firebase.auth().currentUser.getIdToken();
+  const agent = request.agent(app);
 
-  const res = await request(app)
-    .post("/user/login")
-    .set("Authorization", token)
-    .expect(200);
+  await agent.post("/user/login").set("Authorization", token);
 
-  t.truthy(res.header['set-cookie']);
+  await agent.delete("/user/logout").expect(200);
+
+  t.pass();
 });
