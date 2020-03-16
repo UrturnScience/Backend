@@ -20,11 +20,11 @@ const preferenceRoutes = require("./src/routes/preference.route");
 const app = express();
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: "keyboard cat", //
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection })
-    //cookie: {secure: true}, // TODO, must enable https first
+    // cookie: {secure: true}, // TODO, must enable https first
   })
 );
 const port = 3000;
