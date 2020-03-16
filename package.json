@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "ava"
+    "test": "ava --verbose",
+    "test:coverage": "nyc ava"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,9 @@
   },
   "devDependencies": {
     "ava": "^3.5.0",
+    "firebase": "^7.11.0",
     "nodemon": "^2.0.2",
+    "nyc": "^15.0.0",
     "supertest": "^4.0.2"
   },
   "ava": {

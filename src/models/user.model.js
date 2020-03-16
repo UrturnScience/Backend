@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 const admin = require("firebase-admin");
 
 const UserSchema = new Schema({
-  username: { type: String, required: true, max: 100, unique: true },
   firebaseId: {
     type: String,
     required: true,
