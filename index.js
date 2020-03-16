@@ -20,7 +20,7 @@ const preferenceRoutes = require("./src/routes/preference.route");
 const app = express();
 app.use(
   session({
-    secret: "keyboard cat", //
+    secret: "keyboard cat", // TODO, this secret will probably be handled by Google KMS
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection })
