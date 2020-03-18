@@ -5,7 +5,7 @@ const Assignment = require("../models/assignment.model");
 const RoomService = require("./room.service");
 
 exports.createChoreAndPreferences = async function(body) {
-  let objects = {};
+  const objects = {};
 
   //Create chore
   const chore = new Chore({
@@ -19,7 +19,7 @@ exports.createChoreAndPreferences = async function(body) {
   objects["chore"] = chore;
 
   //Get users in the room that the chore was created for
-  userIds = await RoomService.getUserIdsByRoomId(chore.roomId);
+  const userIds = await RoomService.getUserIdsByRoomId(chore.roomId);
 
   objects["preferences"] = [];
   //create preferences for chore
@@ -36,12 +36,14 @@ exports.createChoreAndPreferences = async function(body) {
 };
 
 exports.getChoreIdsByRoomId = async function(roomId) {
-  chores = await Chore.find({ roomId: roomId });
-  choreIds = [];
+  const chores = await Chore.find({ roomId: roomId });
+
+  const choreIds = [];
   for (var i = 0; i < chores.length; i++) {
-    await choreIds.push(chores[i].get("_id"));
+    choreIds.push(chores[i].get("_id"));
   }
-  return await choreIds;
+  
+  return choreIds;
 };
 
 exports.deleteChoreAndReferences = async function(choreId) {

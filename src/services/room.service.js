@@ -7,11 +7,13 @@ const RoomUserService = require("./room_user.service");
 const ChoreService = require("./chore.service");
 
 exports.getUserIdsByRoomId = async function(roomId) {
-  roomUsers = await RoomUser.find({ roomId: roomId });
-  userIds = [];
+  const roomUsers = await RoomUser.find({ roomId: roomId });
+
+  const userIds = [];
   for (var i = 0; i < roomUsers.length; i++) {
     userIds.push(roomUsers[i].get("userId"));
   }
+  
   return userIds;
 };
 
