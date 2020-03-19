@@ -5,7 +5,9 @@ let ChoreSchema = new Schema({
   roomId: { type: Schema.Types.ObjectId, required: true, ref: "Room" },
   name: { type: String, required: true, max: 50 },
   time: { type: Number, required: true },
-  recurring: { type: Boolean, required: true, default: false }
+  recurring: { type: Boolean, required: true, default: false }, //used to determine if should use chore on a weekly basis
+  upcoming: {type: Boolean, default: true}, //used to determine if chore is to be used in the next week(should be in preferences list)
+  active: {type: Boolean, default: false} //used to determine if chore is currently being used in an active assignment
 });
 
 module.exports = mongoose.model("Chore", ChoreSchema);
