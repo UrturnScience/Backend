@@ -3,11 +3,11 @@ const router = express.Router();
 
 const preference_controller = require("../controllers/preference.controller");
 
-router.post("/create", preference_controller.create);
+//router.post("/create", preference_controller.create);
 
 router.put("/update/:id", preference_controller.update);
 
-router.delete("/delete/:id", preference_controller.delete);
+//router.delete("/delete/:id", preference_controller.delete);
 
 router.get("/all", preference_controller.show_all);
 

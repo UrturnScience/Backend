@@ -11,8 +11,8 @@ router.get("/:id", chore_controller.details);
 
 router.get("/room/:rid", chore_controller.show_room);
 
-router.put("/:id/update", chore_controller.update);
+router.put("/update/:id", chore_controller.update);
 
-router.delete("/:id/delete", chore_controller.delete);
+router.delete("/delete/:id", chore_controller.delete);
 
 module.exports = router;
