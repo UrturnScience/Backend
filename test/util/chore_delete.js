@@ -1,8 +1,8 @@
 const test = require("ava");
 const request = require("supertest");
-const { dropDatabase, clearDatabase } = require("../util/database");
-const app = require("../util/app");
-const create_models = require("../util/create_models");
+const { dropDatabase, clearDatabase } = require("./database");
+const app = require("./app");
+const create_models = require("./create_models");
 
 const Assignment = require("../../src/models/assignment.model");
 const Chore = require("../../src/models/chore.model");
@@ -37,7 +37,6 @@ test.serial("DELETE /chore/delete/:id", async t => {
     time: 5
   }
   const res1 = await request(app).post("/chore/create").send(body).expect(200);
-
 
   //Can't use previous model objects, since not in sync with db
   let chores = await Chore.find({});
