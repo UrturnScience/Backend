@@ -8,7 +8,9 @@ const User = require("../../src/models/user.model");
 exports.create_assignment = async function(choreId, userId) {
   const assignment = new Assignment({
     userId: userId,
-    choreId: choreId
+    choreId: choreId,
+    active: true,
+    successful: false
   });
 
   await assignment.save();
@@ -16,12 +18,14 @@ exports.create_assignment = async function(choreId, userId) {
   return assignment;
 };
 
-exports.create_chore = async function(roomId, name, time, recurring = false) {
+exports.create_chore = async function(roomId, name, time, recurring = false, upcoming = true, active = false) {
   const chore = new Chore({
     roomId: roomId,
     name: name,
     time: time,
-    recurring: recurring
+    recurring: recurring,
+    upcoming: upcoming,
+    active: active
   });
 
   await chore.save();

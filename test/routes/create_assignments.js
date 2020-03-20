@@ -48,10 +48,12 @@ test.serial(
     const ru2 = await create_models.create_room_user(room1.id, user2.id);
     const ru3 = await create_models.create_room_user(room1.id, user3.id);
 
-    const chore1 = await create_models.create_chore(room1.id, "Dishes", 5);
-    const chore2 = await create_models.create_chore(room1.id, "Laundry", 3);
-    const chore3 = await create_models.create_chore(room1.id, "Mow", 8);
-    const chore4 = await create_models.create_chore(room1.id, "Clean House", 13);
+    const chore1 = await create_models.create_chore(room1.id, "Dishes", 5, recurring = true, upcoming = true, active= true);
+    const chore2 = await create_models.create_chore(room1.id, "Laundry", 3, recurring = false);
+    const chore3 = await create_models.create_chore(room1.id, "Mow", 8, recurring = false);
+    const chore4 = await create_models.create_chore(room1.id, "Clean House", 13, recurring = true,  upcoming = true, active = false);
+    //Doesn't need preferences, since it should be ignored since "not upcoming"
+    const chore5 = await create_models.create_chore(room1.id, "Scrub", 15, recurring = true, upcoming = false, active = false);
 
     const preference11 = await create_models.create_preference(chore1.id, user1.id, 5);
     const preference12 = await create_models.create_preference(chore1.id, user2.id, 4);
@@ -73,10 +75,16 @@ test.serial(
       .post("/assignment/createAssignments")
       .expect(200);
 
+    //Should have 4 assignments, 4 active chores, 2 upcoming chores, 3 not upcoming chores(retired)
     const assignments = await Assignment.find({});
-
+    const activeChores = await Chore.find({active: true});
+    const upcomingChores = await Chore.find({upcoming: true});
+    const retiredChores = await Chore.find({upcoming: false});
 
     t.truthy(assignments.length == 4);
+    t.truthy(activeChores.length == 4);
+    t.truthy(upcomingChores.length == 2);
+    t.truthy(retiredChores.length == 3);
   }
 );
 
