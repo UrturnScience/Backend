@@ -1,5 +1,8 @@
 const Assignment = require("../models/assignment.model");
 
+const ChoreService = require("../services/chore.service");
+const AssignmentService = require("../services/assignment.service");
+
 exports.create = async function(req, res) {
   const assignment = new Assignment({
     userId: req.body.userId,
@@ -33,3 +36,13 @@ exports.delete = async function(req, res) {
   await Assignment.findOneAndDelete(req.params.id);
   res.sendStatus(200);
 };
+
+exports.create_assignments = async function(req, res){
+  await AssignmentService.createAssignments();
+  res.sendStatus(200);
+}
+
+exports.retire_assignments = async function(req, res){
+  await AssignmentService.retireAssignments();
+  res.sendStatus(200);
+}
