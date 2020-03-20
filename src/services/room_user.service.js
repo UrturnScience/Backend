@@ -63,3 +63,12 @@ exports.removeUserFromRoomAndDeleteReferences = async function(userId) {
   //Remove the user from the room
   await RoomUser.deleteOne({ userId: userId });
 };
+
+exports.getUserIdsByRoomId = async function(roomId){
+  const roomUsers = await RoomUser.find({roomId: roomId});
+  const userIds = [];
+  for(let i = 0; i < roomUsers.length; ++i){
+    userIds.push(roomUsers[i].userId);
+  }
+  return userIds;
+}
