@@ -19,4 +19,6 @@ router.delete("/delete/:id", assignment_controller.delete);
 
 router.post("/createAssignments", assignment_controller.create_assignments);
 
+router.put("/retireAssignments", assignment_controller.retire_assignments);
+
 module.exports = router;

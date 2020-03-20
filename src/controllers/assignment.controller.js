@@ -41,3 +41,8 @@ exports.create_assignments = async function(req, res){
   await AssignmentService.createAssignments();
   res.sendStatus(200);
 }
+
+exports.retire_assignments = async function(req, res){
+  await AssignmentService.retireAssignments();
+  res.sendStatus(200);
+}

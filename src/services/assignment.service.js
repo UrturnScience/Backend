@@ -78,3 +78,23 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     await chore.save();
   }
 };
+
+exports.retireAssignments = async function(){
+  const roomIds = await Room.find({}).distinct("_id");
+  for(let i = 0; i < roomIds.length; ++i){
+    await this.retireAssignmentsByRoomId(roomIds[i]);
+  }
+}
+
+exports.retireAssignmentsByRoomId = async function(roomId){
+  //Want to convert all assignments and chores in this room to have "Active" == False
+  const chores = await Chore.find({roomId: roomId, active: true});
+  for(let i = 0; i < chores.length; ++i){
+    chores[i].active = false;
+    await chores[i].save();
+
+    const assignment = await Assignment.findOne({choreId: chores[i].id, active: true});
+    assignment.active = false;
+    await assignment.save();
+  }
+}
