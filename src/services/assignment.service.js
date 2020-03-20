@@ -2,9 +2,7 @@ const Chore = require("../models/chore.model");
 const Preference = require("../models/preference.model");
 const Assignment = require("../models/assignment.model");
 const Room = require("../models/room.model");
-const RoomUser = require("../models/room_user.model");
 
-const ChoreService = require("./chore.service");
 const RoomUserService = require("./room_user.service");
 
 exports.createAssignments = async function() {
@@ -43,9 +41,11 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     }
 
     //Get the highest eligible preference for the chore
-    const preferences = await Preference.find({choreId: chore.id, userId: {"$in": userIds}}).sort({weight: -1});
+    const preferences = await Preference.find({
+      choreId: chore.id,
+      userId: { $in: userIds }
+    }).sort({ weight: -1 });
     const topBidder = preferences[0];
-
 
     //Top bidder gets that chore and is removed from eligible list
     let userIndex = -1;
@@ -79,22 +79,25 @@ exports.createAssignmentsByRoomId = async function(roomId) {
   }
 };
 
-exports.retireAssignments = async function(){
+exports.retireAssignments = async function() {
   const roomIds = await Room.find({}).distinct("_id");
-  for(let i = 0; i < roomIds.length; ++i){
+  for (let i = 0; i < roomIds.length; ++i) {
     await this.retireAssignmentsByRoomId(roomIds[i]);
   }
-}
+};
 
-exports.retireAssignmentsByRoomId = async function(roomId){
+exports.retireAssignmentsByRoomId = async function(roomId) {
   //Want to convert all assignments and chores in this room to have "Active" == False
-  const chores = await Chore.find({roomId: roomId, active: true});
-  for(let i = 0; i < chores.length; ++i){
+  const chores = await Chore.find({ roomId: roomId, active: true });
+  for (let i = 0; i < chores.length; ++i) {
     chores[i].active = false;
     await chores[i].save();
 
-    const assignment = await Assignment.findOne({choreId: chores[i].id, active: true});
+    const assignment = await Assignment.findOne({
+      choreId: chores[i].id,
+      active: true
+    });
     assignment.active = false;
     await assignment.save();
   }
-}
+};

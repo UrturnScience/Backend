@@ -1,26 +1,14 @@
 const test = require("ava");
 const request = require("supertest");
-const admin = require("firebase-admin");
-const firebase = require("firebase");
-const firebaseConfig = require("../../firebaseConfig.json");
-const {
-  clearUsers,
-  setupCurrentUser,
-  setupFirebaseClient
-} = require("./firebase");
 const { dropDatabase, clearDatabase } = require("./database");
 const app = require("./app");
 const create_models = require("./create_models");
 
 const Assignment = require("../../src/models/assignment.model");
 const Chore = require("../../src/models/chore.model");
-const Preference = require("../../src/models/preference.model");
-const RoomUser = require("../../src/models/room_user.model");
-const Room = require("../../src/models/room.model");
-const User = require("../../src/models/user.model");
 
 test.before(t => {
-  setupFirebaseClient();
+  ;
 });
 
 test.after(async t => {
@@ -87,4 +75,3 @@ test.serial(
     t.truthy(retiredChores.length == 3);
   }
 );
-

@@ -69,4 +69,3 @@ test.serial(
     t.truthy(inactiveChores.length == 6);
   }
 );
-
