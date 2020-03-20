@@ -3,13 +3,6 @@ const admin = require("firebase-admin");
 
 const UserService = require("../services/user.service");
 
-exports.create = async function(req, res) {
-  const user = new User(req.body);
-
-  await user.save();
-  res.status(200).json({ _id: user.id });
-};
-
 exports.login = async function(req, res) {
   const decodedToken = await admin
     .auth()
@@ -36,12 +29,19 @@ exports.details = async function(req, res) {
   res.status(200).json({ user });
 };
 
-exports.update = async function(req, res) {
-  const user = await User.findByIdAndUpdate(req.params.id, { $set: req.body });
-  res.status(200).json({ user });
-};
+// exports.update = async function(req, res) {
+//   const user = await User.findByIdAndUpdate(req.params.id, { $set: req.body });
+//   res.status(200).json({ user });
+// };
 
-exports.delete = async function(req, res) {
-  await UserService.deleteUserAndReferences(req.params.id);
-  res.sendStatus(200);
-};
+// exports.delete = async function(req, res) {
+//   await UserService.deleteUserAndReferences(req.params.id);
+//   res.sendStatus(200);
+// };
+
+// exports.create = async function(req, res) {
+//   const user = new User(req.body);
+
+//   await user.save();
+//   res.status(200).json({ _id: user.id });
+// };
