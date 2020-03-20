@@ -22,7 +22,7 @@ test.afterEach(async t => {
   await clearDatabase();
 });
 
-test.serial("POST /chore/create", async t => {
+test.serial("DELETE /chore/delete/:id", async t => {
   const user1 = await create_models.create_user("123");
   const user2 = await create_models.create_user("345");
 
@@ -36,12 +36,20 @@ test.serial("POST /chore/create", async t => {
     name: "Dishes",
     time: 5
   }
-  const res = await request(app).post("/chore/create").send(body).expect(200);
+  const res1 = await request(app).post("/chore/create").send(body).expect(200);
+
 
   //Can't use previous model objects, since not in sync with db
-  const chores = await Chore.find({});
-  const preferences = await Preference.find({});
-
+  let chores = await Chore.find({});
+  let preferences = await Preference.find({});
   t.truthy(chores.length == 1);
   t.truthy(preferences.length == 2);
+
+  const chore = chores[0];
+  const res2 = await request(app).delete("/chore/delete/" + chore.id).expect(200);
+
+  chores = await Chore.find({});
+  preferences = await Preference.find({});
+  t.truthy(chores.length == 0);
+  t.truthy(preferences.length == 0);
 });
