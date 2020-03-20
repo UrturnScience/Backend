@@ -5,6 +5,7 @@ const Assignment = require("../models/assignment.model");
 const RoomService = require("./room.service");
 
 exports.createChoreAndPreferences = async function(body) {
+
   const objects = {};
 
   //Create chore

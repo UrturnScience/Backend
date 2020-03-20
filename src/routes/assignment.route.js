@@ -7,7 +7,7 @@ router.post("/createAssignments", assignment_controller.create_assignments); //t
 
 router.put("/retireAssignments", assignment_controller.retire_assignments); //tested
 
-router.put("/active/:id", assignment_controller.toggle_active); //Toggle assignment's active attribute true/false
+router.put("/active/:id", assignment_controller.toggle_active); //Toggle assignment's active attribute true/false, tested
 
 // router.post("/create", assignment_controller.create);
 
