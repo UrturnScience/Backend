@@ -44,14 +44,20 @@ exports.getChoreIdsByRoomId = async function(roomId) {
 };
 
 exports.deleteChoreAndReferences = async function(choreId) {
-  //Delete Chore, Assignments of that chore, preferences of that chores
+  //Two different types: chores with existing assignments, chores without any assignments
+  //Chores with assignments get "retired"(chore.upcoming = false, since chore might already exist if recurring in assignments)
+  //Chores without any assignments simply get deleted(alongside their preferences)
 
-  //Preference
-  await Preference.deleteMany({ choreId: choreId });
-
-  //Assignment
-  await Assignment.deleteMany({ choreId: choreId });
-
-  //Chore
-  await Chore.deleteOne({ _id: choreId });
+  const assignments = await Assignment.find({choreId: choreId});
+  if (assignments.length > 0){
+    //Retire
+    const chore = await Chore.findOne({_id: choreId});
+    chore.upcoming = false;
+    await chore.save();
+  }
+  else{
+    //Delete since no assignments have been created for it(therefore can erase it from history)
+    await Preference.deleteMany({ choreId: choreId });
+    await Chore.deleteOne({ _id: choreId });
+  }
 };
