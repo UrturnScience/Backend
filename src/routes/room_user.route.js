@@ -3,9 +3,9 @@ const router = express.Router();
 
 const room_user_controller = require("../controllers/room_user.controller");
 
-router.post("/add/:rid/:uid", room_user_controller.add_user);
+router.post("/add/:rid/:uid", room_user_controller.add_user); //tested
 
-router.delete("/delete/:uid", room_user_controller.remove_user);
+router.delete("/delete/:uid", room_user_controller.remove_user); //tested
 
 router.get("/user/:uid", room_user_controller.show_user); //not tested
 

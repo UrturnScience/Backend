@@ -1,6 +1,5 @@
 const Assignment = require("../models/assignment.model");
 
-const ChoreService = require("../services/chore.service");
 const AssignmentService = require("../services/assignment.service");
 
 exports.create_assignments = async function(req, res){

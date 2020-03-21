@@ -1,8 +1,6 @@
 const User = require("../models/user.model");
 const admin = require("firebase-admin");
 
-const UserService = require("../services/user.service");
-
 exports.login = async function(req, res) {
   const decodedToken = await admin
     .auth()

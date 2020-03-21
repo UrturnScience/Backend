@@ -1,5 +1,4 @@
 const Room = require("../models/room.model");
-const User = require("../models/user.model");
 
 const RoomService = require("../services/room.service");
 

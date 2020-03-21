@@ -1,6 +1,5 @@
 const Preference = require("../models/preference.model");
 
-
 exports.update = async function(req, res) {
   const preference = await Preference.findOne({_id: req.params.id});
   preference.weight = req.params.weight;

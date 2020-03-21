@@ -9,6 +9,6 @@ router.get("/:id", room_controller.details); //not tested
 
 router.post("/create", room_controller.create); //not tested
 
-router.delete("/delete/:id", room_controller.delete);
+router.delete("/delete/:id", room_controller.delete); //tested
 
 module.exports = router;

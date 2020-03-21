@@ -5,9 +5,9 @@ const {
   clearUsers,
   setupCurrentUser,
   setupFirebaseClient
-} = require("./firebase");
-const { dropDatabase } = require("./database");
-const app = require("./app");
+} = require("../util/firebase");
+const { dropDatabase } = require("../util/database");
+const app = require("../util/app");
 
 test.before(t => {
   setupFirebaseClient();

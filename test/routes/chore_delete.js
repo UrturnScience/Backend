@@ -4,7 +4,6 @@ const { dropDatabase, clearDatabase } = require("../util/database");
 const app = require("../util/app");
 const create_models = require("../util/create_models");
 
-const Assignment = require("../../src/models/assignment.model");
 const Chore = require("../../src/models/chore.model");
 const Preference = require("../../src/models/preference.model");
 

@@ -3,8 +3,6 @@ const Preference = require("../models/preference.model");
 const Assignment = require("../models/assignment.model");
 const RoomUser = require("../models/room_user.model");
 
-const RoomService = require("./room.service");
-
 exports.createChoreAndPreferences = async function(body) {
   const objects = {};
 

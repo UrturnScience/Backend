@@ -1,10 +1,8 @@
-const User = require("../models/user.model");
 const Room = require("../models/room.model");
 const RoomUser = require("../models/room_user.model");
 const Chore = require("../models/chore.model");
 
 const RoomUserService = require("./room_user.service");
-const ChoreService = require("./chore.service");
 
 exports.deleteRoomAndReferences = async function(roomId) {
   //Deletes roomusers(preferences and assignments) and chores relating to that room, and deletes room
