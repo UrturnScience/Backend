@@ -6,28 +6,17 @@ const Chore = require("../models/chore.model");
 const RoomUserService = require("./room_user.service");
 const ChoreService = require("./chore.service");
 
-exports.getUserIdsByRoomId = async function(roomId) {
-  const roomUsers = await RoomUser.find({ roomId: roomId });
-
-  const userIds = [];
-  for (var i = 0; i < roomUsers.length; i++) {
-    userIds.push(roomUsers[i].get("userId"));
-  }
-  
-  return userIds;
-};
-
 exports.deleteRoomAndReferences = async function(roomId) {
-  //Delete room, roomusers for that room, and chores for that room
+  //Deletes roomusers(preferences and assignments) and chores relating to that room, and deletes room
 
-  //Delete roomusers attached to the room
-  await RoomUserService.deleteRoomUsersByRoomId(roomId);
+  //Remove users from that room(also deletes preferences and assignments for that user)
+  const userIds = await RoomUser.find({roomId:roomId}).distinct("userId");
+  for(let i = 0; i < userIds.length; ++i){
+    await RoomUserService.removeUserFromRoomAndDeletePreferencesAndAssignments(userIds[i]);
+  }
 
   //Delete chores belonging to that room
-  const choreIds = await ChoreService.getChoreIdsByRoomId(roomId);
-  for (var i = 0; i < choreIds.length; i++) {
-    await ChoreService.deleteChoreAndReferences(choreIds[i]);
-  }
+  await Chore.deleteMany({roomId: roomId}); //Don't need to worry about preferences and assignments, since above did it
 
   //Delete room
   await Room.deleteOne({ _id: roomId });
