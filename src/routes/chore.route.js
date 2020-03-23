@@ -11,7 +11,8 @@ router.get("/room/:rid", chore_controller.show_room); //no test
 
 router.post("/create", chore_controller.create); //tested
 
-router.put("/update/:id", chore_controller.update); //no test
+//Can only update time value
+router.put("/update/:id", chore_controller.update); 
 
 router.delete("/delete/:id", chore_controller.delete); //tested
 

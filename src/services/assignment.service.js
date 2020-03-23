@@ -5,6 +5,7 @@ const Room = require("../models/room.model");
 const RoomUser = require("../models/room_user.model");
 
 const PreferenceService = require("./preference.service");
+const UtilityService = require("./utility_functions.service");
 
 exports.createAssignments = async function() {
   const rooms = await Room.find({});
@@ -16,57 +17,58 @@ exports.createAssignments = async function() {
 exports.createAssignmentsByRoomId = async function(roomId) {
   //For a given room, want to create the assignments for the upcoming week(and handle housekeeping)
   //Algorithm:
-  //Get all chores to be considered for the week
-  //Work through the list of chores(sorted descending by time value rn, can change later)
-  //Whoever in the room wants that chore the most, give it to them
-  //Remove that user from the list of eligible users
-  //Repeat the process until we have 0 users left in the eligible group
-  //Then repopulate the eligible group with all users
+  //Simulate a draft between users given their preferences
+  //Will utilize a snake draft(with the initial list scrambled each time)
+  //Following the drafting order, the drafter will get their highest choice of upcoming chores
 
   //Get the chores for that room that are "upcoming" for the week to be assigned
   const upcomingChores = await Chore.find({
     roomId: roomId,
     upcoming: true
-  }).sort({ time: -1 });
+  }).distinct("_id");
+
+  //Keep track of chosen chores
+  const chosenChoreIds = Set();
 
   //Users in that room
-  let userIds = await RoomUser.getUserIdsByRoomId(roomId);
+  const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
-  //Get highest eligible bidder for chore
-  for (let i = 0; i < upcomingChores.length; ++i) {
-    const chore = upcomingChores[i];
+  //Creates a shuffled array of userIds from a copy
+  const draftingOrder = UtilityService.getDraftingOrder(userIds, upcomingChores.length);
 
-    //if no eligible users, repopulate the set
-    if (userIds.length == 0) {
-      userIds = await RoomUser.getUserIdsByRoomId(roomId);
-    }
+  //Working through the drafting order, select the highest rated chore upcoming for the user
+  for (let i = 0; i < draftingOrder.length; ++i) {
+    //The user to draft for the round
+    const userId = draftingOrder[i];
 
-    //Get the highest eligible preference for the chore
-    const preferences = await Preference.find({
-      choreId: chore.id,
-      userId: { $in: userIds }
-    }).sort({ weight: -1 });
-    const topBidder = preferences[0];
+    //Get the drafter's preferences in order of their preferences
+    const userPreferences = await Preference.find({ userId: userId }).sort([
+      "weight",
+      1
+    ]);
 
-    //Top bidder gets that chore and is removed from eligible list
-    let userIndex = -1;
-    for (let i = 0; i < userIds.length; ++i) {
-      if (userIds[i].toString() == topBidder.userId.toString()) {
-        userIndex = i;
-      }
-    }
-    userIds.splice(userIndex, 1);
+    //Get highest available chore
+    const chosenChoreId = await UtilityService.findHighestupcomingChore(
+      userPreferences,
+      chosenChoreIds
+    );
 
-    //Top bidder gets that chore assigned to them
+    //Create assignment for that chore
     const assignment = new Assignment({
-      choreId: chore.id,
-      userId: topBidder.userId,
+      choreId: chosenChoreId,
+      userId: userId,
       active: true,
       successful: false
     });
     await assignment.save();
 
-    //Housekeeping for chore
+    //Add the chosen chore to the list of chosen chores
+    chosenChoreIds.add(chosenChoreId);
+  }
+
+  //Housekeeping for chores
+  for (let i = 0; i < upcomingChores.length; ++i) {
+    const chore = upcomingChores[i];
     //Chore is considered "active/inprogress" since it has an active assignment
     chore.active = true;
     //If chore is recurring, make it upcoming up for next week
@@ -79,6 +81,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     await chore.save();
   }
 
+  //Fix the preference ordering since some chores were removed from the upcoming preference list
   await PreferenceService.fixPreferencesByRoomId(roomId);
 };
 
