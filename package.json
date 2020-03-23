@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -r dotenv/config index.js",
-    "test": "ava --verbose --serial",
+    "test": "ava --verbose --serial --node-arguments=\"-r dotenv/config\"",
     "test:coverage": "nyc ava"
   },
   "repository": {
