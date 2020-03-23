@@ -3,7 +3,7 @@ const router = express.Router();
 
 const preference_controller = require("../controllers/preference.controller");
 
-router.put("/update/:id/:weight", preference_controller.update); //tested
+router.put("/update/:uid", preference_controller.update); //tested
 
 router.get("/all", preference_controller.show_all); //not tested
 
