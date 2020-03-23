@@ -22,4 +22,3 @@ exports.clearDatabase = function(){
   Room.deleteMany({});
   clearUsers();
 }
-
