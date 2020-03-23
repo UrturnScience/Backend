@@ -8,7 +8,6 @@ let AssignmentSchema = new Schema({
   choreId: {
     type: Schema.Types.ObjectId,
     ref: "Chore",
-    unique: true,
     index: true
   }
 });

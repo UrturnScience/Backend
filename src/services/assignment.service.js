@@ -2,8 +2,7 @@ const Chore = require("../models/chore.model");
 const Preference = require("../models/preference.model");
 const Assignment = require("../models/assignment.model");
 const Room = require("../models/room.model");
-
-const RoomUserService = require("./room_user.service");
+const RoomUser = require("../models/room_user.model");
 
 exports.createAssignments = async function() {
   const rooms = await Room.find({});
@@ -29,7 +28,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
   }).sort({ time: -1 });
 
   //Users in that room
-  let userIds = await RoomUserService.getUserIdsByRoomId(roomId);
+  let userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
   //Get highest eligible bidder for chore
   for (let i = 0; i < upcomingChores.length; ++i) {
@@ -37,7 +36,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
 
     //if no eligible users, repopulate the set
     if (userIds.length == 0) {
-      userIds = await RoomUserService.getUserIdsByRoomId(roomId);
+      userIds = await RoomUser.getUserIdsByRoomId(roomId);
     }
 
     //Get the highest eligible preference for the chore

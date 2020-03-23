@@ -10,4 +10,10 @@ let ChoreSchema = new Schema({
   active: {type: Boolean, default: false} //used to determine if chore is currently being used in an active assignment
 });
 
+ChoreSchema.statics.getChoreIdsByRoomId = async function(roomId) {
+  const choreIds = await this.find({ roomId: roomId }).distinct("_id");
+  
+  return choreIds;
+};
+
 module.exports = mongoose.model("Chore", ChoreSchema);

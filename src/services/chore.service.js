@@ -1,8 +1,7 @@
 const Chore = require("../models/chore.model");
 const Preference = require("../models/preference.model");
 const Assignment = require("../models/assignment.model");
-
-const RoomService = require("./room.service");
+const RoomUser = require("../models/room_user.model");
 
 exports.createChoreAndPreferences = async function(body) {
   const objects = {};
@@ -19,7 +18,9 @@ exports.createChoreAndPreferences = async function(body) {
   objects["chore"] = chore;
 
   //Get users in the room that the chore was created for
-  const userIds = await RoomService.getUserIdsByRoomId(chore.roomId);
+  const userIds = await RoomUser.find({ roomId: body.roomId }).distinct(
+    "userId"
+  );
 
   objects["preferences"] = [];
   //create preferences for chore
@@ -35,26 +36,22 @@ exports.createChoreAndPreferences = async function(body) {
   return objects;
 };
 
-exports.getChoreIdsByRoomId = async function(roomId) {
-  const chores = await Chore.find({ roomId: roomId });
+exports.retireOrDeleteChoreAndPreferencesAndAssignments = async function(
+  choreId
+) {
+  //Two different types: chores with existing assignments, chores without any assignments
+  //Chores with assignments get "retired"(chore.upcoming = false, since chore might already exist if recurring in assignments)
+  //Chores without any assignments simply get deleted(alongside their preferences)
 
-  const choreIds = [];
-  for (var i = 0; i < chores.length; i++) {
-    choreIds.push(chores[i].get("_id"));
+  const assignments = await Assignment.find({ choreId: choreId });
+  if (assignments.length > 0) {
+    const chore = await Chore.findOne({ _id: choreId });
+    //Retire the chore(upcoming = false, don't change active since might have current chores for the week which will be processed by retireAssignments)
+    chore.upcoming = false;
+    await chore.save();
+  } else {
+    //Delete since no assignments have been created for it(therefore can erase it from history) //A chore which hasn't been processed and not recurring
+    await Preference.deleteMany({ choreId: choreId });
+    await Chore.deleteOne({ _id: choreId });
   }
-  
-  return choreIds;
-};
-
-exports.deleteChoreAndReferences = async function(choreId) {
-  //Delete Chore, Assignments of that chore, preferences of that chores
-
-  //Preference
-  await Preference.deleteMany({ choreId: choreId });
-
-  //Assignment
-  await Assignment.deleteMany({ choreId: choreId });
-
-  //Chore
-  await Chore.deleteOne({ _id: choreId });
 };

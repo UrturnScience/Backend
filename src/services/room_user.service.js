@@ -3,25 +3,23 @@ const RoomUser = require("../models/room_user.model");
 const Chore = require("../models/chore.model");
 Assignment = require("../models/assignment.model");
 
-const ChoreService = require("./chore.service");
-
-exports.createRoomUserAndPreferences = async function(body) {
+exports.addUserToRoomAndPopulatePreferences = async function(body) {
+  //Add user to the room, and create preferences for that user for all existing chores in that room
   const objects = {};
 
-  //Create chore
+  //add user to room
   const roomUser = new RoomUser({
     roomId: body.rid,
     userId: body.uid
   });
-
   await roomUser.save();
   objects["roomUser"] = roomUser;
 
   //Get chores in the room for that user
-  const choreIds = await ChoreService.getChoreIdsByRoomId(roomUser.roomId);
+  const choreIds = await Chore.getChoreIdsByRoomId(roomUser.roomId);
 
   objects["preferences"] = [];
-  //create preferences for chore
+  //create preferences for chores in the room
   for (var i = 0; i < choreIds.length; ++i) {
 
     const preference = new Preference({
@@ -36,39 +34,13 @@ exports.createRoomUserAndPreferences = async function(body) {
   return objects;
 };
 
-exports.getRoomIdByUserId = async function(userId) {
-  const roomUser = await RoomUser.findOne({ userId: userId });
-  
-  return roomUser.get("roomId");
-};
-
-exports.deleteRoomUsersByRoomId = async function(roomId) {
-  await RoomUser.deleteMany({ roomId: roomId });
-};
-
-exports.removeUserFromRoomAndDeleteReferences = async function(userId) {
+exports.removeUserFromRoomAndDeletePreferencesAndAssignments = async function(userId) {
   //Remove user from room, delete chore preferences and assignments
 
-  //Room for user
-  const roomId = await this.getRoomIdByUserId(userId);
-  //Get chores for that room
-  const choreIds = await ChoreService.getChoreIdsByRoomId(roomId);
-
-  //Delete the chore preferences and assignments for the user
-  for (var i = 0; i < choreIds.length; ++i) {
-    await Preference.deleteOne({ userId: userId, choreId: choreIds[i] });
-    await Assignment.deleteOne({ userId: userId, choreId: choreIds[i] });
-  }
+  //Since user can only be assigned to one room at a time, we can do it this way
+  await Preference.deleteMany({userId: userId});
+  await Assignment.deleteMany({userId: userId});
 
   //Remove the user from the room
   await RoomUser.deleteOne({ userId: userId });
 };
-
-exports.getUserIdsByRoomId = async function(roomId){
-  const roomUsers = await RoomUser.find({roomId: roomId});
-  const userIds = [];
-  for(let i = 0; i < roomUsers.length; ++i){
-    userIds.push(roomUsers[i].userId);
-  }
-  return userIds;
-}
