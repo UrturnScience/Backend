@@ -3,18 +3,18 @@ const router = express.Router();
 
 const assignment_controller = require("../controllers/assignment.controller");
 
-router.post("/create", assignment_controller.create);
+router.post("/createAssignments", assignment_controller.create_assignments); //tested
 
-router.put("/update/:id", assignment_controller.update);
+router.put("/retireAssignments", assignment_controller.retire_assignments); //tested
 
-router.get("/all", assignment_controller.show_all);
+router.put("/active/:id", assignment_controller.toggle_active); //Toggle assignment's active attribute true/false, tested
 
-router.get("/:id", assignment_controller.details);
+// router.post("/create", assignment_controller.create);
 
-router.delete("/delete/:id", assignment_controller.delete);
+// router.get("/all", assignment_controller.show_all);
 
-//router.get("/room/:rid", assignment_controller.show_room); to be configured later
+// router.get("/:id", assignment_controller.details);
 
-//router.get('/room/:rid/user/:uid', assignment_controller.show_room_user); to be configured later
+// router.delete("/delete/:id", assignment_controller.delete);
 
 module.exports = router;

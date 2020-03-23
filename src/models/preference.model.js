@@ -5,7 +5,7 @@ const Chore = require("../models/chore.model");
 let PreferenceSchema = new Schema({
   choreId: { type: Schema.Types.ObjectId, required: true, ref: "Chore" },
   userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-  weight: { type: Number, required: true, default: 0 }
+  weight: { type: Number, required: true, default: 1 }
 });
 
 PreferenceSchema.index({ choreId: 1, userId: 1 }, { unique: true }); //compound unique index

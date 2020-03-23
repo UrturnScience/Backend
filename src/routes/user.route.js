@@ -3,18 +3,18 @@ const router = express.Router();
 
 const user_controller = require("../controllers/user.controller");
 
-router.get("/all", user_controller.show_all);
+router.post("/login", user_controller.login); //tested
 
-router.post("/create", user_controller.create);
+router.delete("/logout", user_controller.logout); //tested
 
-router.post("/login", user_controller.login);
+router.get("/all", user_controller.show_all); //not tested
 
-router.delete("/logout", user_controller.logout);
+router.get("/:id", user_controller.details); //not tested
 
-router.get("/:id", user_controller.details);
+// router.post("/create", user_controller.create);
 
-router.put("/:id/update", user_controller.update);
+// router.put("/update/:id", user_controller.update);
 
-router.delete("/:id/delete", user_controller.delete);
+// router.delete("/delete/:id", user_controller.delete);
 
 module.exports = router;

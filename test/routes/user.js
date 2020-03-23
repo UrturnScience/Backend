@@ -1,16 +1,13 @@
 const test = require("ava");
-const express = require("express");
 const request = require("supertest");
-const admin = require("firebase-admin");
 const firebase = require("firebase");
-const firebaseConfig = require("../../firebaseConfig.json");
 const {
   clearUsers,
   setupCurrentUser,
   setupFirebaseClient
 } = require("../util/firebase");
 const { dropDatabase } = require("../util/database");
-const app = require("../../index");
+const app = require("../util/app");
 
 test.before(t => {
   setupFirebaseClient();
