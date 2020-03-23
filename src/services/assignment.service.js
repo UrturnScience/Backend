@@ -4,6 +4,8 @@ const Assignment = require("../models/assignment.model");
 const Room = require("../models/room.model");
 const RoomUser = require("../models/room_user.model");
 
+const PreferenceService = require("./preference.service");
+
 exports.createAssignments = async function() {
   const rooms = await Room.find({});
   for (let i = 0; i < rooms.length; ++i) {
@@ -76,6 +78,8 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     }
     await chore.save();
   }
+
+  await PreferenceService.fixPreferencesByRoomId(roomId);
 };
 
 exports.retireAssignments = async function() {

@@ -3,6 +3,8 @@ const RoomUser = require("../models/room_user.model");
 const Chore = require("../models/chore.model");
 Assignment = require("../models/assignment.model");
 
+const PreferenceService = require("./preference.service");
+
 exports.addUserToRoomAndPopulatePreferences = async function(body) {
   //Add user to the room, and create preferences for that user for all existing chores in that room
   const objects = {};
@@ -30,6 +32,8 @@ exports.addUserToRoomAndPopulatePreferences = async function(body) {
     await preference.save();
     objects["preferences"].push(preference);
   }
+
+  await PreferenceService.fixPreferencesByUserId(roomUser.userId);
 
   return objects;
 };
