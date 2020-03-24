@@ -15,6 +15,7 @@ const roomUserRoutes = require("./src/routes/room_user.route");
 const choreRoutes = require("./src/routes/chore.route");
 const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
+const messageRoutes = require("./src/routes/message.route");
 
 const app = express();
 const sessionParser = session({
@@ -24,7 +25,7 @@ const sessionParser = session({
   store: new MongoStore({ mongooseConnection: mongoose.connection })
   // cookie: {secure: true}, // TODO, must enable https first
 });
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(sessionParser);
 
 setupDB().then(() => {
@@ -44,6 +45,7 @@ app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
+app.use("/message", messageRoutes);
 
 const server = app.listen(process.env.NODE_PORT, () =>
   console.log(`Example app listening on port ${process.env.NODE_PORT}!`)

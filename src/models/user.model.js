@@ -19,10 +19,14 @@ UserSchema.methods.getFirebaseUser = function() {
 };
 
 UserSchema.methods.getRoommateIds = async function() {
-  const userId = this._id;
-  const roomUser = await RoomUser.findOne({ userId });
-  const userIds = await RoomUser.getUserIdsByRoomId(roomUser.roomId);
-  return userIds.filter(id => id.toString() !== userId.toString());
+  const roomId = await this.getRoomId();
+  const userIds = await RoomUser.getUserIdsByRoomId(roomId);
+  return userIds.filter(id => id.toString() !== this._id.toString());
+};
+
+UserSchema.methods.getRoomId = async function() {
+  const roomUser = await RoomUser.findOne({ userId: this._id });
+  return roomUser.roomId;
 };
 
 UserSchema.statics.getWebSocket = function(uid) {

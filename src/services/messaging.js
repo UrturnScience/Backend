@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Message = require("../models/message.model");
 const mongoose = require("mongoose");
 
 function pushNotification(userId) {}
@@ -9,7 +10,7 @@ async function messageUser(userId, msg) {
   if (ws) {
     console.log(msg, "to", userId);
     ws.send(msg);
-  }else{
+  } else {
     /**
      * TODO: send push notification to user
      */
@@ -23,12 +24,16 @@ async function messageUsers(userIds, msg) {
 
 function setupMessagingEvents(ws) {
   ws.on("message", async data => {
-    const msg = { data };
-    msg.sender = ws.user._id;
+    const message = new Message({
+      data,
+      senderId: ws.user._id,
+      roomId: await ws.user.getRoomId()
+    });
 
     const roommateIds = await ws.user.getRoommateIds();
+    messageUsers(roommateIds, message.toJSON());
 
-    messageUsers(roommateIds, msg);
+    await message.save();
   });
 }
 
