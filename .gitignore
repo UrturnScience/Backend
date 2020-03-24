@@ -11,6 +11,3 @@ npm-debug.log
 
 # firebase keys
 firebaseConfig.json
-
-# frontend mockup
-public
