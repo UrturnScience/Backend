@@ -11,8 +11,8 @@ let RoomUserSchema = new Schema({
   }
 });
 
-RoomUserSchema.statics.getUserIdsByRoomId = async function(roomId){
-  return await this.find({roomId: roomId}).distinct("userId");
+RoomUserSchema.statics.getUserIdsByRoomId = function(roomId){
+  return this.find({roomId: roomId}).distinct("userId");
 }
 
 module.exports = mongoose.model("RoomUser", RoomUserSchema);

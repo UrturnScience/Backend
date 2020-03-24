@@ -1,40 +1,27 @@
 const WebSocket = require("ws");
 const messaging = require("./messaging");
-const usersSocket = new Map(); // key is UID, value is websocket instance
+const User = require("../models/user.model");
 
-function getUsersSocket(uid) {
-  return usersSocket.get(uid);
-}
-
-function setupSocket(server) {
+function setupSocket(server, sessionParser) {
   const wss = new WebSocket.Server({ clientTracking: false, noServer: true });
 
   server.on("upgrade", (request, socket, head) => {
-    /**
-     * TODO Add Authentication with firebase
-     * setting the session value to user
-     * https://github.com/websockets/ws#client-authentication
-     */
-    function authenticate(req, callback) {
-      callback(null, {});
-    }
-
-    authenticate(request, (err, client) => {
-      if (err || !client) {
+    sessionParser(request, {}, () => {
+      if (!request.session.userId) {
         socket.destroy();
         return;
       }
 
-      wss.handleUpgrade(request, socket, head, function done(ws) {
-        wss.emit("connection", ws, request, client);
+      wss.handleUpgrade(request, socket, head, function(ws) {
+        wss.emit("connection", ws, request);
       });
     });
   });
 
-  wss.on("connection", (ws, request, client) => {
-    const user = request.session.user;
-    ws.user = user;
-    usersSocket.set(user.uid, ws);
+  wss.on("connection", async (ws, request, client) => {
+    console.log(request.session.userId + " is now connected with websocket");
+    ws.user = await User.findById(request.session.userId);
+    User.setWebSocket(request.session.userId, ws);
 
     messaging.setupMessagingEvents(ws);
 
@@ -42,4 +29,4 @@ function setupSocket(server) {
   });
 }
 
-module.exports = { setupSocket, getUsersSocket };
+module.exports = { setupSocket };

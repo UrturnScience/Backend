@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -r dotenv/config index.js",
-    "test": "ava --verbose --serial --node-arguments=\"-r dotenv/config\"",
+    "test": "ava --match='Auth*' --verbose --serial --node-arguments=\"-r dotenv/config\"",
     "test:coverage": "nyc ava"
   },
   "repository": {
@@ -39,7 +39,8 @@
   },
   "ava": {
     "files": [
-      "!test/util"
+      "!test/util",
+      "!test/routes"
     ]
   }
 }
