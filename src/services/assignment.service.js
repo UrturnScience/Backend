@@ -25,16 +25,16 @@ exports.createAssignmentsByRoomId = async function(roomId) {
   const upcomingChores = await Chore.find({
     roomId: roomId,
     upcoming: true
-  }).distinct("_id");
+  });
 
-  //Keep track of chosen chores
-  const chosenChoreIds = Set();
+  //Keep track of chosen chores, keep them as the toString version of the objectids
+  const chosenChoreIds = new Set();
 
   //Users in that room
   const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
   //Creates a shuffled array of userIds from a copy
-  const draftingOrder = UtilityService.getDraftingOrder(userIds, upcomingChores.length);
+  const draftingOrder = await UtilityService.getDraftingOrder(userIds, upcomingChores.length);
 
   //Working through the drafting order, select the highest rated chore upcoming for the user
   for (let i = 0; i < draftingOrder.length; ++i) {
@@ -42,13 +42,10 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     const userId = draftingOrder[i];
 
     //Get the drafter's preferences in order of their preferences
-    const userPreferences = await Preference.find({ userId: userId }).sort([
-      "weight",
-      1
-    ]);
+    const userPreferences = await Preference.find({ userId: userId }).sort({weight: 1});
 
     //Get highest available chore
-    const chosenChoreId = await UtilityService.findHighestupcomingChore(
+    const chosenChoreId = await UtilityService.findHighestUpcomingChore(
       userPreferences,
       chosenChoreIds
     );
@@ -63,7 +60,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     await assignment.save();
 
     //Add the chosen chore to the list of chosen chores
-    chosenChoreIds.add(chosenChoreId);
+    chosenChoreIds.add(chosenChoreId.toString());
   }
 
   //Housekeeping for chores

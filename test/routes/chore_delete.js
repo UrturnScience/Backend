@@ -3,6 +3,7 @@ const request = require("supertest");
 const { dropDatabase, clearDatabase } = require("../util/database");
 const app = require("../util/app");
 const create_models = require("../util/create_models");
+const PreferenceChecker = require("../util/preference_checker");
 
 const Chore = require("../../src/models/chore.model");
 const Preference = require("../../src/models/preference.model");
@@ -55,7 +56,7 @@ test.serial("DELETE /chore/delete/:id", async t => {
   //Check that preferences and chore was made
   t.truthy(chores.length == 2);
   t.truthy(preferences.length == 4);
-
+  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room.id));
 
   //Want to test that when deleting, wont delete any chores if assignments exist for that chore
   //Get a chore and make an assignment out of it
@@ -68,6 +69,7 @@ test.serial("DELETE /chore/delete/:id", async t => {
   preferences = await Preference.find({});
   t.truthy(chores.length == 2);
   t.truthy(preferences.length == 4);
+  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room.id));
 
 
   //Want to delete the other chore made that doesn't have an assignment for it, so should actually delete it and its preferences
@@ -77,4 +79,5 @@ test.serial("DELETE /chore/delete/:id", async t => {
   preferences = await Preference.find({});
   t.truthy(chores.length == 1);
   t.truthy(preferences.length == 2);
+  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room.id));
 });

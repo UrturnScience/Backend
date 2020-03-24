@@ -1,8 +1,9 @@
 const Preference = require("../models/preference.model");
+const PreferenceService = require("../services/preference.service");
 
 //Takes a list of preferences for a user and reorders them according to list's ordering
 exports.update = async function(req, res) {
-  await PreferenceService.updatePreferences(req.body.preferenceIds);
+  await PreferenceService.updatePreferences(req.params.uid, req.body.preferenceIds);
   res.sendStatus(200);
 };
 

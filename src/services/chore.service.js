@@ -24,7 +24,6 @@ exports.createChoreAndPreferences = async function(body) {
     "userId"
   );
 
-  objects["preferences"] = [];
   //create preferences for chore
   for (var i = 0; i < userIds.length; ++i) {
     const preference = new Preference({
@@ -32,10 +31,11 @@ exports.createChoreAndPreferences = async function(body) {
       userId: userIds[i]
     });
     await preference.save();
-    objects["preferences"].push(preference);
   }
 
   await PreferenceService.fixPreferencesByRoomId(body.roomId);
+
+  objects['preferences'] = await Preference.find({userId: {"$in": userIds}});
 
   return objects;
 };
@@ -46,7 +46,6 @@ exports.retireOrDeleteChoreAndPreferencesAndAssignments = async function(choreId
   //Chores without any assignments simply get deleted(alongside their preferences)
   const chore = await Chore.findOne({ _id: choreId });
   const assignments = await Assignment.find({ choreId: choreId });
-  const chore = await Chore.findOne({ _id: choreId });
   if (assignments.length > 0) {
     //Retire the chore(upcoming = false, don't change active since might have current chores for the week which will be processed by retireAssignments)
     chore.upcoming = false;

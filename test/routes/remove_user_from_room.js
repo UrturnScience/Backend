@@ -34,8 +34,8 @@ test.serial("DELETE /roomuser/delete/:uid", async t => {
     const chore1 = await create_models.create_chore(room.id, "Dishes", 5);
     const chore2 = await create_models.create_chore(room.id, "Lawn", 10);
 
-    const preference1 = await create_models.create_preference(chore1.id, user.id, 5);
-    const preference2 = await create_models.create_preference(chore2.id, user.id, 3);
+    const preference1 = await create_models.create_preference(chore1.id, user.id, 0);
+    const preference2 = await create_models.create_preference(chore2.id, user.id, 1);
 
     const assignment1 = await create_models.create_assignment(chore1.id, user.id);
     const assignment2 = await create_models.create_assignment(chore2.id, user.id);

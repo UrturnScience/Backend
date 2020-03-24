@@ -3,11 +3,22 @@ const Chore = require("../models/chore.model");
 const RoomUser = require("../models/room_user.model");
 
 //Updates the user's preferences to match the ordering given by the user(used for preference.update controller)
-exports.updatePreferences = async function(preferenceIds) {
-  for (let i = 0; i < preferenceIds.length; ++i) {
-    const preference = await Preference.findOne({ _id: preferenceIds[i] });
-    preference.weight = i;
-    await preference.save();
+exports.updatePreferences = async function(userId, preferenceIds) {
+  //Want to ensure that the list of preferences being given is accurate for the user
+  //Makes sure that the preferences belong to the user and get the chores corresponding to them
+  const choreIds = await Preference.find({
+    _id: { $in: preferenceIds },
+    userId: userId
+  }).distinct("choreId");
+  //Makes sure that the chores for the preferences are actually upcoming
+  const upcomingChores = await Chore.find({ _id: choreIds, upcoming: true });
+
+  if (upcomingChores.length == preferenceIds.length) {
+    for (let i = 0; i < preferenceIds.length; ++i) {
+      const preference = await Preference.findOne({ _id: preferenceIds[i] });
+      preference.weight = i;
+      await preference.save();
+    }
   }
 };
 
@@ -27,7 +38,7 @@ exports.fixPreferencesByUserId = async function(userId) {
   const upcomingPreferences = await Preference.find({
     userId: userId,
     choreId: { $in: upcomingChoreIds }
-  }).sort(["weight", 1]);
+  }).sort({ weight: 1 });
 
   //Ensures that the preference weights for the user are unique and ascending without gaps from 0
   //Since we have the preferences sorted initially by weight, we can preserve the relative order that was saved from before
@@ -37,9 +48,9 @@ exports.fixPreferencesByUserId = async function(userId) {
   }
 };
 
-exports.fixPreferencesByRoomId = async function(roomId){
-  const userIds = await RoomUser.find({roomId: roomId}).distinct("userId");
-  for(let i = 0; i < userIds.length; ++i){
-    await fixPreferencesByUserId(userIds[i]);
+exports.fixPreferencesByRoomId = async function(roomId) {
+  const userIds = await RoomUser.find({ roomId: roomId }).distinct("userId");
+  for (let i = 0; i < userIds.length; ++i) {
+    await this.fixPreferencesByUserId(userIds[i]);
   }
-}
+};

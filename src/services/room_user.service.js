@@ -20,7 +20,6 @@ exports.addUserToRoomAndPopulatePreferences = async function(body) {
   //Get chores in the room for that user
   const choreIds = await Chore.getChoreIdsByRoomId(roomUser.roomId);
 
-  objects["preferences"] = [];
   //create preferences for chores in the room
   for (var i = 0; i < choreIds.length; ++i) {
 
@@ -28,12 +27,11 @@ exports.addUserToRoomAndPopulatePreferences = async function(body) {
       choreId: choreIds[i],
       userId: roomUser.userId
     });
-
     await preference.save();
-    objects["preferences"].push(preference);
   }
 
   await PreferenceService.fixPreferencesByUserId(roomUser.userId);
+  objects['preferences'] = await Preference.find({userId: roomUser.userId});
 
   return objects;
 };

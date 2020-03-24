@@ -7,11 +7,11 @@ exports.shuffleArray = async function(a) {
   return a;
 };
 
-exports.findHighestAvailableChore = async function(preferences, chosenChoreIds) {
+exports.findHighestUpcomingChore = async function(preferences, chosenChoreIds) {
   for (let i = 0; i < preferences.length; ++i) {
-    const choreId = preferences[i].choreId;
+    const choreId = (preferences[i].choreId).toString();
 
-    if (!chosenChores.has(choreId)) {
+    if (!chosenChoreIds.has(choreId)) {
       return choreId;
     }
   }
@@ -24,9 +24,9 @@ exports.getDraftingOrder = async function(userIds, size){
   
     //Create the drafting order for the assignments via snake draft(with over flow)
     const draftOrder = [];
-    while (draftOrder.length < upcomingChores.length) {
-      draftOrder.push(shuffledUserIds);
-      draftOrder.push(reversedShuffledUserIds);
+    while (draftOrder.length < size) {
+      draftOrder.push(...shuffledUserIds);
+      draftOrder.push(...reversedShuffledUserIds);
     }
 
     return draftOrder.slice(0, size);
