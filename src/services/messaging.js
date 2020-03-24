@@ -8,7 +8,6 @@ async function messageUser(userId, msg) {
   const ws = User.getWebSocket(userId);
 
   if (ws) {
-    console.log(msg, "to", userId);
     ws.send(msg);
   } else {
     /**

@@ -19,13 +19,10 @@ function setupSocket(server, sessionParser) {
   });
 
   wss.on("connection", async (ws, request, client) => {
-    console.log(request.session.userId + " is now connected with websocket");
     ws.user = await User.findById(request.session.userId);
     User.setWebSocket(request.session.userId, ws);
 
     messaging.setupMessagingEvents(ws);
-
-    ws.on("close", () => {});
   });
 }
 
