@@ -39,7 +39,7 @@
   },
   "ava": {
     "files": [
-      "!test/util",
+      "!test/util"
     ]
   }
 }
