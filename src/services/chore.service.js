@@ -3,6 +3,8 @@ const Preference = require("../models/preference.model");
 const Assignment = require("../models/assignment.model");
 const RoomUser = require("../models/room_user.model");
 
+const PreferenceService = require("./preference.service");
+
 exports.createChoreAndPreferences = async function(body) {
   const objects = {};
 
@@ -22,7 +24,6 @@ exports.createChoreAndPreferences = async function(body) {
     "userId"
   );
 
-  objects["preferences"] = [];
   //create preferences for chore
   for (var i = 0; i < userIds.length; ++i) {
     const preference = new Preference({
@@ -30,22 +31,22 @@ exports.createChoreAndPreferences = async function(body) {
       userId: userIds[i]
     });
     await preference.save();
-    objects["preferences"].push(preference);
   }
+
+  await PreferenceService.fixPreferencesByRoomId(body.roomId);
+
+  objects['preferences'] = await Preference.find({userId: {"$in": userIds}});
 
   return objects;
 };
 
-exports.retireOrDeleteChoreAndPreferencesAndAssignments = async function(
-  choreId
-) {
+exports.retireOrDeleteChoreAndPreferencesAndAssignments = async function(choreId){
   //Two different types: chores with existing assignments, chores without any assignments
   //Chores with assignments get "retired"(chore.upcoming = false, since chore might already exist if recurring in assignments)
   //Chores without any assignments simply get deleted(alongside their preferences)
-
+  const chore = await Chore.findOne({ _id: choreId });
   const assignments = await Assignment.find({ choreId: choreId });
   if (assignments.length > 0) {
-    const chore = await Chore.findOne({ _id: choreId });
     //Retire the chore(upcoming = false, don't change active since might have current chores for the week which will be processed by retireAssignments)
     chore.upcoming = false;
     await chore.save();
@@ -54,4 +55,7 @@ exports.retireOrDeleteChoreAndPreferencesAndAssignments = async function(
     await Preference.deleteMany({ choreId: choreId });
     await Chore.deleteOne({ _id: choreId });
   }
+
+  await PreferenceService.fixPreferencesByRoomId(chore.roomId);
+
 };

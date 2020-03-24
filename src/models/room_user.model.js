@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 let RoomUserSchema = new Schema({
-  roomId: { type: Schema.Types.ObjectId, required: true, ref: "Room" },
+  roomId: { type: Schema.Types.ObjectId, required: true, ref: "Room", index: true},
   userId: {
     type: Schema.Types.ObjectId,
     required: true,

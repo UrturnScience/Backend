@@ -23,12 +23,10 @@ exports.show_room = async function(req, res) {
 };
 
 exports.update = async function(req, res) {
-  const chore = await Chore.findOneAndUpdate(
-    { _id: req.params.id },
-    { $set: req.body },
-    { new: true }
-  );
-  res.status(200).json({ chore });
+  const chore = await Chore.findOne({_id: req.params.id});
+  chore.time = req.body.time;
+  await chore.save();
+  res.sendStatus(200);
 };
 
 exports.delete = async function(req, res) {

@@ -17,7 +17,7 @@ exports.toggle_active = async function(req, res) {
   const assignment = await Assignment.findOne({_id: req.params.id});
   assignment.active = !(assignment.active);
   await assignment.save();
-  res.status(200).json({ assignment });
+  res.sendStatus(200);
 };
 
 // exports.create = async function(req, res) {
