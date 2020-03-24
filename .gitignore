@@ -7,3 +7,9 @@ npm-debug.log
 
 # env
 .env
+.env.local
+
+# firebase keys
+firebaseConfig.json
+
+public

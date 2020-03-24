@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 let AssignmentSchema = new Schema({
-  completed: { type: Boolean, required: true, default: false },
-  userId: { type: Schema.Types.ObjectId, ref: "User" },
+  active: { type: Boolean, default: true }, //used to determine if current assignment, or finished
+  successful: {type: Boolean, default: false}, //used to track the history of a user's successful chores
+  userId: { type: Schema.Types.ObjectId, ref: "User" , index: true},
   choreId: {
     type: Schema.Types.ObjectId,
     ref: "Chore",
-    unique: true,
     index: true
   }
 });

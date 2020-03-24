@@ -3,15 +3,12 @@ const router = express.Router();
 
 const room_controller = require("../controllers/room.controller");
 
-router.get("/all", room_controller.show_all);
+router.get("/all", room_controller.show_all); //not tested
 
-router.post("/create", room_controller.create);
+router.get("/:id", room_controller.details); //not tested
 
-router.get("/:id", room_controller.details);
+router.post("/create", room_controller.create); //not tested
 
-router.put("/:id/update", room_controller.update);
-
-router.delete("/:id/delete", room_controller.delete);
-
+router.delete("/delete/:id", room_controller.delete); //tested
 
 module.exports = router;

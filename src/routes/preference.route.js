@@ -3,20 +3,22 @@ const router = express.Router();
 
 const preference_controller = require("../controllers/preference.controller");
 
-router.post("/create", preference_controller.create);
+router.put("/update/:uid", preference_controller.update); //tested
 
-router.put("/update/:id", preference_controller.update);
+router.get("/all", preference_controller.show_all); //not tested
 
-router.delete("/delete/:id", preference_controller.delete);
+router.get("/user/:uid", preference_controller.show_user); //not tested
 
-router.get("/all", preference_controller.show_all);
+router.get("/chore/:cid", preference_controller.show_chore); //not tested
 
-router.get("/user/:uid", preference_controller.show_user);
+router.get("/room/:rid", preference_controller.show_room); //not tested
 
-router.get("/chore/:cid", preference_controller.show_chore);
+router.get("/:id", preference_controller.details); //not tested
 
-router.get("/room/:rid", preference_controller.show_room);
+//Routes disabled below
 
-router.get("/:id", preference_controller.details);
+//router.post("/create", preference_controller.create);
+
+//router.delete("/delete/:id", preference_controller.delete);
 
 module.exports = router;

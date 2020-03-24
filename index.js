@@ -1,7 +1,7 @@
-require("dotenv").config();
 require("express-async-errors");
-
 const express = require("express");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 const errorMiddleware = require("./src/errorHandling");
 const bodyParser = require("body-parser");
@@ -17,7 +17,19 @@ const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
 
 const app = express();
+<<<<<<< HEAD
 const port = 8080;
+=======
+app.use(
+  session({
+    secret: "keyboard cat", // TODO, this secret will probably be handled by Google KMS
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    // cookie: {secure: true}, // TODO, must enable https first
+  })
+);
+>>>>>>> c22413a10435f8164317048d9ec96aba946a88df
 
 setupDB().then(() => {
   console.log(
@@ -35,7 +47,9 @@ app.use("/assignment", assignmentRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
 app.use("/roomuser", roomUserRoutes);
+app.use("/preference", preferenceRoutes);
 
+<<<<<<< HEAD
 app.get("/ping", (req, res) => {
   res.status(200).send("Pong");
 });
@@ -49,4 +63,9 @@ app.get("/authPing", async (req, res) => {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+=======
+app.listen(process.env.NODE_PORT, () => console.log(`Example app listening on port ${process.env.NODE_PORT}!`));
+>>>>>>> c22413a10435f8164317048d9ec96aba946a88df
 app.use(errorMiddleware.handleExpressError);
+
+module.exports = app;
