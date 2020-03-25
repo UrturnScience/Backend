@@ -1,87 +1,20 @@
-# Project Title
 
-One Paragraph of project description goes here
-
+# Backend 
 ## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
+### Setting up Dev Environment
+1. Clone repo
+2. run `npm install`
+3. download and install mongodb server [here]([https://www.mongodb.com/download-center/community](https://www.mongodb.com/download-center/community))
+4. setup and create a firebase project (This firebase project should be your personal)
+a. get your firebase admin credentials by following these [instructions](https://firebase.google.com/docs/admin/setup#initialize-sdk). Store the JSON credentials file in your documents or dev folder (This will set as `GOOGLE_APPLICATION_CREDENTIALS` env varible)
+b. get your firebase credentials for a web app by following these [instructions](https://firebase.google.com/docs/web/setup#register-app). Save the firebaseConfig as a JSON file named `firebaseConfig.json` in the root directory of the project.
+5. create a .env file in the root directory of the project. Example:
 ```
-Give examples
+FIREBASE_DATABASE_URL=https://basicmessagingapp-270623.firebaseio.com
+GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Shane\Documents\Dev\firebaseCredentials.json
+MONGODB_HOST=localhost:27017
+MONGODB_DBNAME=test
+NODE_PORT=3000
 ```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+6. run `npm run test` to verify all test cases pass for your environment
+7. run `npm run dev` to run the server in the dev environment
