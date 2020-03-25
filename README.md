@@ -6,8 +6,8 @@
 2. run `npm install`
 3. download and install mongodb server [here]([https://www.mongodb.com/download-center/community](https://www.mongodb.com/download-center/community))
 4. setup and create a firebase project (This firebase project should be your personal)
-a. get your firebase admin credentials by following these [instructions](https://firebase.google.com/docs/admin/setup#initialize-sdk). Store the JSON credentials file in your documents or dev folder (This will set as `GOOGLE_APPLICATION_CREDENTIALS` env varible). Also take note of the `databaseURL` which will be set as the `FIREBASE_DATABASE_URL`.
-b. get your firebase credentials for a web app by following these [instructions](https://firebase.google.com/docs/web/setup#register-app). Save the firebaseConfig as a JSON file named `firebaseConfig.json` in the root directory of the project.
+	- get your firebase admin credentials by following these [instructions](https://firebase.google.com/docs/admin/setup#initialize-sdk). Store the JSON credentials file in your documents or dev folder (This will set as `GOOGLE_APPLICATION_CREDENTIALS` env varible). Also take note of the `databaseURL` which will be set as the `FIREBASE_DATABASE_URL`.
+	- get your firebase credentials for a web app by following these [instructions](https://firebase.google.com/docs/web/setup#register-app). Save the firebaseConfig as a JSON file named `firebaseConfig.json` in the root directory of the project.
 5. create a .env file in the root directory of the project. Example:
 ```
 FIREBASE_DATABASE_URL=https://basicmessagingapp-n.firebaseio.com
