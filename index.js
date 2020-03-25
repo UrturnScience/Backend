@@ -10,26 +10,24 @@ const admin = require("firebase-admin");
 require("./src/services/firebaseSetup");
 const { setupDB } = require("./src/services/dbSetup");
 const roomRoutes = require("./src/routes/room.route");
+const { setupSocket } = require("./src/services/socket");
 const userRoutes = require("./src/routes/user.route");
 const roomUserRoutes = require("./src/routes/room_user.route");
 const choreRoutes = require("./src/routes/chore.route");
 const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
+const messageRoutes = require("./src/routes/message.route");
 
 const app = express();
-<<<<<<< HEAD
-const port = 8080;
-=======
-app.use(
-  session({
-    secret: "keyboard cat", // TODO, this secret will probably be handled by Google KMS
-    resave: false,
-    saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
-    // cookie: {secure: true}, // TODO, must enable https first
-  })
-);
->>>>>>> c22413a10435f8164317048d9ec96aba946a88df
+const sessionParser = session({
+  secret: "keyboard cat", // TODO, this secret will probably be handled by Google KMS
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  // cookie: {secure: true}, // TODO, must enable https first
+});
+app.use(express.static("public"));
+app.use(sessionParser);
 
 setupDB().then(() => {
   console.log(
@@ -48,8 +46,8 @@ app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
 app.use("/roomuser", roomUserRoutes);
 app.use("/preference", preferenceRoutes);
+app.use("/message", messageRoutes);
 
-<<<<<<< HEAD
 app.get("/ping", (req, res) => {
   res.status(200).send("Pong");
 });
@@ -62,10 +60,12 @@ app.get("/authPing", async (req, res) => {
   res.status(200).send(user.email + " just made authenticated ping request!");
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-=======
-app.listen(process.env.NODE_PORT, () => console.log(`Example app listening on port ${process.env.NODE_PORT}!`));
->>>>>>> c22413a10435f8164317048d9ec96aba946a88df
+const server = app.listen(process.env.NODE_PORT, () =>
+  console.log(`Example app listening on port ${process.env.NODE_PORT}!`)
+);
+
 app.use(errorMiddleware.handleExpressError);
+
+setupSocket(server, sessionParser);
 
 module.exports = app;

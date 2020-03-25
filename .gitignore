@@ -12,4 +12,5 @@ npm-debug.log
 # firebase keys
 firebaseConfig.json
 
+# public
 public
