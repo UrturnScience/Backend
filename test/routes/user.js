@@ -7,6 +7,7 @@ const {
   setupFirebaseClient
 } = require("../util/firebase");
 const { dropDatabase } = require("../util/database");
+const User = require("../../src/models/user.model");
 const app = require("../util/app");
 
 test.before(t => {
@@ -37,6 +38,28 @@ test.serial(
       .expect(200);
 
     t.truthy(res.header["set-cookie"]);
+  }
+);
+
+test.serial(
+  "POST /user/login should create a user record with firebaseId if one doesn't exist",
+  async t => {
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword("test@test.com", "password");
+    const token = await firebase.auth().currentUser.getIdToken();
+
+    const res = await request(app)
+      .post("/user/login")
+      .set("Authorization", token)
+      .expect(200);
+
+    const user = await User.findOne({
+      firebaseId: firebase.auth().currentUser.uid
+    });
+
+    t.truthy(user);
+    t.is(user.firebaseId, firebase.auth().currentUser.uid);
   }
 );
 
