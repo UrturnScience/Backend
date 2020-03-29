@@ -5,7 +5,7 @@ export function connect() {
   ws = new WebSocket(wsUrl);
 
   ws.onopen = e => {
-    console.log('wsopen', e);
+    //console.log('wsopen', e);
   }
 
   ws.onmessage = e => {
@@ -13,11 +13,11 @@ export function connect() {
   };
 
   ws.onerror = e => {
-    console.log('wserror', e);
+    //console.log('wserror', e);
   };
 
   ws.onclose = e => {
-    console.log('wsclose', e);
+    //console.log('wsclose', e);
   };
 }
 
