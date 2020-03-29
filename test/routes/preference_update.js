@@ -6,6 +6,7 @@ const create_models = require("../util/create_models");
 const PreferenceChecker = require("../util/preference_checker");
 
 const Preference = require("../../src/models/preference.model");
+const RoomUser = require("../../src/models/room_user.model");
 
 test.before(t => {});
 
@@ -26,6 +27,7 @@ test.serial("PUT /preference/update/:id/:weight", async t => {
   const room = await create_models.create_room();
   const chore1 = await create_models.create_chore(room.id, "Dishes", 5);
   const chore2 = await create_models.create_chore(room.id, "Laundry", 5);
+  await create_models.create_room_user(room.id, user.id);
 
   const preference1 = await create_models.create_preference(chore1.id, user.id, 0);
   const preference2 = await create_models.create_preference(chore2.id, user.id, 1);
