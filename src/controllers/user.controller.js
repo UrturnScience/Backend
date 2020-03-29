@@ -5,7 +5,12 @@ exports.login = async function(req, res) {
   const decodedToken = await admin
     .auth()
     .verifyIdToken(req.headers.authorization);
-  const user = await User.findOne({ firebaseId: decodedToken.uid });
+  let user = await User.findOne({ firebaseId: decodedToken.uid });
+
+  if (!user) {
+    user = new User({ firebaseId: decodedToken.uid });
+    await user.save();
+  }
 
   req.session.userId = user._id;
   res.status(200).json({ user });

@@ -6,7 +6,7 @@ import { Button, View, Text, TextInput } from "react-native";
 import firebaseConfig from "./firebaseConfig";
 import Login from "./src/login";
 
-const url = "http://192.168.0.10:3000"
+const url = "http://192.168.0.10:3000";
 
 export default function App() {
   if (firebase.apps.length == 0) {
@@ -18,10 +18,31 @@ export default function App() {
   const [user, setUser] = useState();
   const [errorNotif, setErrorNotif] = useState();
 
+  async function makeLoginRequest() {
+    if (!firebase.auth().currentUser) {
+      return;
+    }
+
+    // create account with our backend
+    const token = await firebase.auth().currentUser.getIdToken();
+    const config = { headers: { Authorization: token } };
+    const res = await Axios.post(`${url}/user/login`, null, config);
+  }
+
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
+    makeLoginRequest();
     if (initializing) setInitializing(false);
+  }
+
+  // Handle creating new account
+  async function onCreateAccount(email, password) {
+    try {
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
+    } catch (error) {
+      setErrorNotif(error.message);
+    }
   }
 
   // Handle login attempt
@@ -33,15 +54,11 @@ export default function App() {
     }
   }
 
-  // Handle creating new account
-  function onCreateAccount(email, password) {
-    firebase.auth().createUserWithEmailAndPassword(email, password);
-  }
-
   // Loggin out
   function onLogout() {
     firebase.auth().signOut();
   }
+
   // Make ping request
   async function pingRequest() {
     const res = await Axios.get(`${url}/ping`);
@@ -49,7 +66,6 @@ export default function App() {
   }
 
   // Make an authenticated request
-  // sends firebase Id token as JWT
   async function authenticatedRequest() {
     const token = await firebase.auth().currentUser.getIdToken();
     const config = { headers: { Authorization: token } };

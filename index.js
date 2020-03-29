@@ -18,8 +18,8 @@ const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
 const messageRoutes = require("./src/routes/message.route");
 
-const swaggerUi = require('swagger-ui-express')
-const swaggerDocument = require('yamljs').load('./swagger.yaml')
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("yamljs").load("./swagger.yaml");
 
 const app = express();
 const sessionParser = session({
@@ -64,7 +64,7 @@ app.get("/authPing", async (req, res) => {
 });
 
 // Swagger routes
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const server = app.listen(process.env.NODE_PORT, () =>
   console.log(`Example app listening on port ${process.env.NODE_PORT}!`)
