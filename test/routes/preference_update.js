@@ -42,7 +42,7 @@ test.serial("PUT /preference/update/:id/:weight", async t => {
   const updatedPreference1 = await Preference.findOne({_id: preference1.id});
   const updatedPreference2 = await Preference.findOne({_id: preference2.id});
 
-  t.truthy(updatedPreference1.weight == 1);
-  t.truthy(updatedPreference2.weight == 0);
-  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room.id));
+  t.true(updatedPreference1.weight == 1);
+  t.true(updatedPreference2.weight == 0);
+  t.true(await PreferenceChecker.validateUserPreferencesByRoomId(room.id));
 });

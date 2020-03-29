@@ -4,21 +4,10 @@ const RoomUser = require("../models/room_user.model");
 
 //Updates the user's preferences to match the ordering given by the user(used for preference.update controller)
 exports.updatePreferences = async function(userId, preferenceIds) {
-  //Want to ensure that the list of preferences being given is accurate for the user
-  //Makes sure that the preferences belong to the user and get the chores corresponding to them
-  const choreIds = await Preference.find({
-    _id: { $in: preferenceIds },
-    userId: userId
-  }).distinct("choreId");
-  //Makes sure that the chores for the preferences are actually upcoming
-  const upcomingChores = await Chore.find({ _id: choreIds, upcoming: true });
-
-  if (upcomingChores.length == preferenceIds.length) {
-    for (let i = 0; i < preferenceIds.length; ++i) {
-      const preference = await Preference.findOne({ _id: preferenceIds[i] });
-      preference.weight = i;
-      await preference.save();
-    }
+  for (let i = 0; i < preferenceIds.length; ++i) {
+    const preference = await Preference.findOne({ _id: preferenceIds[i] });
+    preference.weight = i;
+    await preference.save();
   }
 };
 
