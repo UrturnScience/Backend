@@ -23,6 +23,8 @@ function setupSocket(server, sessionParser) {
     User.setWebSocket(request.session.userId, ws);
 
     messaging.setupMessagingEvents(ws);
+
+    console.log("User " + request.session.userId + " is connected!");
   });
 }
 

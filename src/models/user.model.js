@@ -37,4 +37,12 @@ UserSchema.statics.setWebSocket = function(uid, ws) {
   usersSocket.set(uid.toString(), ws);
 };
 
+UserSchema.statics.destroyWebSocket = function(uid) {
+  const ws = usersSocket.get(uid.toString());
+  if (ws) {
+    ws.close();
+    usersSocket.delete(uid.toString());
+  }
+};
+
 module.exports = mongoose.model("User", UserSchema);
