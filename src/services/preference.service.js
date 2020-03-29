@@ -9,6 +9,8 @@ exports.updatePreferences = async function(userId, preferenceIds) {
     preference.weight = i;
     await preference.save();
   }
+
+  await this.fixPreferencesByUserId(userId);
 };
 
 exports.fixPreferencesByUserId = async function(userId) {
