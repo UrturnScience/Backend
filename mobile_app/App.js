@@ -19,25 +19,30 @@ export default function App() {
   const [errorNotif, setErrorNotif] = useState();
 
   async function makeLoginRequest() {
-    if (!firebase.auth().currentUser) {
-      return;
-    }
-
     // create account with our backend
     const token = await firebase.auth().currentUser.getIdToken();
     const config = { headers: { Authorization: token } };
     const res = await Axios.post(`${url}/user/login`, null, config);
   }
 
+  async function makeLogoutRequest() {
+    console.log("logging out");
+    const res = await Axios.delete(`${url}/user/logout`);
+  }
+
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
-    makeLoginRequest();
+
+    if (firebase.auth().currentUser) {
+      makeLoginRequest();
+    }
+
     if (initializing) setInitializing(false);
   }
 
   // Handle creating new account
-  async function onCreateAccount(email, password) {
+  async function createAccount(email, password) {
     try {
       await firebase.auth().createUserWithEmailAndPassword(email, password);
     } catch (error) {
@@ -46,7 +51,7 @@ export default function App() {
   }
 
   // Handle login attempt
-  async function onLogin(email, password) {
+  async function loginUser(email, password) {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
@@ -55,8 +60,9 @@ export default function App() {
   }
 
   // Loggin out
-  function onLogout() {
+  function logoutUser() {
     firebase.auth().signOut();
+    makeLogoutRequest();
   }
 
   // Make ping request
@@ -90,7 +96,7 @@ export default function App() {
       <View>
         <Text> </Text>
         <Text> </Text>
-        <Login {...{ onLogin, onCreateAccount }} />
+        <Login {...{ onLogin: loginUser, onCreateAccount: createAccount }} />
         {errorNotif && <Text>{errorNotif}</Text>}
       </View>
     );
@@ -98,8 +104,10 @@ export default function App() {
 
   return (
     <View>
+      <Text> </Text>
+      <Text> </Text>
       <Text>Welcome {user.email}</Text>
-      <Button title="logout" onPress={onLogout} />
+      <Button title="logout" onPress={logoutUser} />
       <Button title="ping server" onPress={pingRequest} />
       <Button
         title="authenticated ping server"
