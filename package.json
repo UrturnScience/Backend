@@ -27,7 +27,9 @@
     "express-session": "^1.17.0",
     "firebase-admin": "^8.10.0",
     "mongoose": "^5.9.2",
-    "ws": "^7.2.3"
+    "swagger-ui-express": "^4.1.4",
+    "ws": "^7.2.3",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "ava": "^3.5.0",

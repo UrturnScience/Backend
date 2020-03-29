@@ -18,6 +18,9 @@ const assignmentRoutes = require("./src/routes/assignment.route");
 const preferenceRoutes = require("./src/routes/preference.route");
 const messageRoutes = require("./src/routes/message.route");
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('yamljs').load('./swagger.yaml')
+
 const app = express();
 const sessionParser = session({
   secret: "keyboard cat", // TODO, this secret will probably be handled by Google KMS
@@ -59,6 +62,9 @@ app.get("/authPing", async (req, res) => {
   const user = await admin.auth().getUser(decodedToken.uid);
   res.status(200).send(user.email + " just made authenticated ping request!");
 });
+
+// Swagger routes
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 const server = app.listen(process.env.NODE_PORT, () =>
   console.log(`Example app listening on port ${process.env.NODE_PORT}!`)
