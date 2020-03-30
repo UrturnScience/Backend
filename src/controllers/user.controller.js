@@ -17,6 +17,8 @@ exports.login = async function(req, res) {
 };
 
 exports.logout = async function(req, res) {
+  User.destroyWebSocket(req.session.userId);
+
   req.session.destroy(function() {
     res.sendStatus(200);
   });
