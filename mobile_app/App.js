@@ -8,6 +8,7 @@ import {
   makeLogoutRequest,
   getRoomMessages,
   getUserRoom,
+  joinRoom,
   createAndJoinRoom
 } from "./src/util/request";
 import * as websocket from "./src/util/websocket";
@@ -24,6 +25,7 @@ export default function App() {
   const [user, setUser] = useState();
   const [errorNotif, setErrorNotif] = useState();
   const [room, setRoom] = useState();
+  const [roomInput, setRoomInput] = useState("roomId");
   const [messages, setMessages] = useState([]);
 
   // Handle user state changes
@@ -31,20 +33,23 @@ export default function App() {
     if (firebase.auth().currentUser) {
       const backendUser = await makeLoginRequest();
       const roomUser = await getUserRoom(backendUser._id);
+      let resMessages;
+      if (roomUser) {
+        resMessages = await getRoomMessages(roomUser.roomId);
+      }
       websocket.connect();
+
       setUser(backendUser);
       if (roomUser) {
-        const resMessages = await getRoomMessages(roomUser.roomId);
-        setMessages(resMessages);
         setRoom(roomUser.roomId);
       }
-
-      websocket.getWebSocket().onmessage = e => {
-        const data = JSON.parse(e.data);
-        setMessages([...messages, data]);
-      };
+      if (resMessages) {
+        setMessages(resMessages);
+      }
     } else {
       setUser();
+      setRoom();
+      setMessages();
     }
 
     if (initializing) setInitializing(false);
@@ -74,10 +79,20 @@ export default function App() {
     makeLogoutRequest();
   }
 
-  // join room
+  // Create room
   async function createRoom() {
     const roomId = await createAndJoinRoom(user._id);
-    setUser(roomId);
+    setRoom(roomId);
+  }
+
+  // Join room
+  async function onJoinRoom() {
+    await joinRoom(user._id, roomInput);
+    const resMessages = await getRoomMessages(roomInput);
+    setRoom(roomInput);
+    if (resMessages) {
+      setMessages(resMessages);
+    }
   }
 
   // messaging
@@ -89,6 +104,18 @@ export default function App() {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
+
+  if (websocket.getWebSocket()) {
+    websocket.getWebSocket().onmessage = e => {
+      const data = JSON.parse(e.data);
+
+      if (messages) {
+        setMessages([...messages, data]);
+      } else {
+        setMessages([data]);
+      }
+    };
+  }
 
   if (initializing) return null;
 
@@ -112,7 +139,15 @@ export default function App() {
       {room ? (
         <Text>room: {room}</Text>
       ) : (
-        <Button title="create room" onPress={createRoom} />
+        <View>
+          <Button title="create room" onPress={createRoom} />
+          <TextInput
+            style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+            onChangeText={text => setRoomInput(text)}
+            value={roomInput}
+          ></TextInput>
+          <Button title="join room" onPress={onJoinRoom} />
+        </View>
       )}
       <Button title="logout" onPress={logoutUser} />
       <Chat {...{ onSend, messages }}></Chat>

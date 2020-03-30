@@ -6,13 +6,14 @@ export function connect() {
 
   ws.onopen = e => {
     //console.log('wsopen', e);
-  }
+  };
 
   ws.onerror = e => {
     //console.log('wserror', e);
   };
 
   ws.onclose = e => {
+    ws = null;
     //console.log('wsclose', e);
   };
 }

@@ -26,12 +26,17 @@ export async function getUserRoom(userId) {
   return res.data.roomUsers && res.data.roomUsers[0];
 }
 
-export async function createAndJoinRoom(userId) {
-  const roomRes = await Axios.post(`${httpUrl}/room/create`);
-  const roomId = roomRes.data.room._id;
+export async function joinRoom(userId, roomId) {
   const roomUser = await Axios.post(
     `${httpUrl}/roomuser/add/${roomId}/${userId}`
   );
+  return roomUser;
+}
+
+export async function createAndJoinRoom(userId) {
+  const roomRes = await Axios.post(`${httpUrl}/room/create`);
+  const roomId = roomRes.data.room._id;
+  await joinRoom(userId, roomId);
   return roomId;
 }
 
