@@ -18,11 +18,11 @@ exports.remove_user = async function(req, res) {
 };
 
 exports.show_room = async function(req, res) {
-  const roomUsers = await RoomUser.findByRoomId(req.params.rid);
+  const roomUsers = await RoomUser.find({roomId:req.params.rid});
   res.status(200).json({ roomUsers });
 };
 
 exports.show_user = async function(req, res) {
-  const roomUsers = await RoomUser.findByUserId(req.params.uid);
+  const roomUsers = await RoomUser.findOne({userId:req.params.uid});
   res.status(200).json({ roomUsers });
 };
