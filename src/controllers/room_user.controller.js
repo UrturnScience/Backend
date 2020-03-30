@@ -23,10 +23,14 @@ exports.remove_user = async function(req, res) {
 
 exports.show_room = async function(req, res) {
   const roomUsers = await RoomUser.find({ roomId: req.params.rid });
-  res.status(200).json({ roomUsers });
+  res
+    .status(200)
+    .json({ roomUsers: roomUsers.map(roomUser => roomUser.toJSON()) });
 };
 
 exports.show_user = async function(req, res) {
   const roomUsers = await RoomUser.find({ userId: req.params.uid });
-  res.status(200).json({ roomUsers });
+  res
+    .status(200)
+    .json({ roomUsers: roomUsers.map(roomUser => roomUser.toJSON()) });
 };
