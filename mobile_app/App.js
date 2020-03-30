@@ -31,11 +31,13 @@ export default function App() {
     if (firebase.auth().currentUser) {
       const backendUser = await makeLoginRequest();
       const roomUser = await getUserRoom(backendUser._id);
-      const resMessages = await getRoomMessages(roomUser.roomId);
       websocket.connect();
       setUser(backendUser);
-      setRoom(roomUser.roomId);
-      setMessages(resMessages);
+      if (roomUser) {
+        const resMessages = await getRoomMessages(roomUser.roomId);
+        setMessages(resMessages);
+        setRoom(roomUser.roomId);
+      }
 
       websocket.getWebSocket().onmessage = e => {
         const data = JSON.parse(e.data);
