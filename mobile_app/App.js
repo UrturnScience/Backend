@@ -6,6 +6,7 @@ import firebaseConfig from "./firebaseConfig";
 import {
   makeLoginRequest,
   makeLogoutRequest,
+  getRoomMessages,
   getUserRoom,
   createAndJoinRoom
 } from "./src/util/request";
@@ -30,9 +31,11 @@ export default function App() {
     if (firebase.auth().currentUser) {
       const backendUser = await makeLoginRequest();
       const roomUser = await getUserRoom(backendUser._id);
+      const resMessages = await getRoomMessages(roomUser.roomId);
       websocket.connect();
       setUser(backendUser);
       setRoom(roomUser.roomId);
+      setMessages(resMessages);
     } else {
       setUser();
     }
@@ -75,6 +78,11 @@ export default function App() {
     websocket.getWebSocket().send(msg);
   }
 
+  websocket.getWebSocket().onmessage = e => {
+    const data = JSON.parse(e.data);
+    setMessages([...messages, data]);
+  };
+
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -98,6 +106,7 @@ export default function App() {
       <Text> </Text>
       <Text> </Text>
       <Text>Welcome {firebase.auth().currentUser.email}</Text>
+      <Text>User: {user._id}</Text>
       {room ? (
         <Text>room: {room}</Text>
       ) : (

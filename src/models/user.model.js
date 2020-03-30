@@ -21,7 +21,7 @@ UserSchema.methods.getFirebaseUser = function() {
 UserSchema.methods.getRoommateIds = async function() {
   const roomId = await this.getRoomId();
   const userIds = await RoomUser.getUserIdsByRoomId(roomId);
-  return userIds.filter(id => id.toString() !== this._id.toString());
+  return userIds //.filter(id => id.toString() !== this._id.toString());
 };
 
 UserSchema.methods.getRoomId = async function() {

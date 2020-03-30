@@ -16,6 +16,11 @@ export async function makeLogoutRequest() {
   const res = await Axios.delete(`${httpUrl}/user/logout`);
 }
 
+export async function getRoomMessages(roomId) {
+  const res = await Axios.get(`${httpUrl}/message/room/${roomId}`);
+  return res.data.messages;
+}
+
 export async function getUserRoom(userId) {
   const res = await Axios.get(`${httpUrl}/roomuser/user/${userId}`);
   return res.data.roomUsers && res.data.roomUsers[0];

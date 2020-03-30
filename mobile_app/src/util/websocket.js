@@ -8,10 +8,6 @@ export function connect() {
     //console.log('wsopen', e);
   }
 
-  ws.onmessage = e => {
-    console.log('wsmessage', e);
-  };
-
   ws.onerror = e => {
     //console.log('wserror', e);
   };

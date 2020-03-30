@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, FlatList } from "react-native";
 function MessageItem({ message }) {
   return (
     <View>
-      <Text>test</Text>
+      <Text>{message.senderId} sent "{message.data}"</Text>
     </View>
   );
 }
