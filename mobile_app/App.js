@@ -36,6 +36,11 @@ export default function App() {
       setUser(backendUser);
       setRoom(roomUser.roomId);
       setMessages(resMessages);
+
+      websocket.getWebSocket().onmessage = e => {
+        const data = JSON.parse(e.data);
+        setMessages([...messages, data]);
+      };
     } else {
       setUser();
     }
@@ -77,11 +82,6 @@ export default function App() {
   function onSend(msg) {
     websocket.getWebSocket().send(msg);
   }
-
-  websocket.getWebSocket().onmessage = e => {
-    const data = JSON.parse(e.data);
-    setMessages([...messages, data]);
-  };
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
