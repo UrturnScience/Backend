@@ -10,34 +10,34 @@ const UserSchema = new Schema({
     required: true,
     max: 128,
     unique: true,
-    index: true
-  }
+    index: true,
+  },
 });
 
-UserSchema.methods.getFirebaseUser = function() {
+UserSchema.methods.getFirebaseUser = function () {
   return admin.auth().getUser(this.firebaseId);
 };
 
-UserSchema.methods.getRoommateIds = async function() {
+UserSchema.methods.getRoommateIds = async function () {
   const roomId = await this.getRoomId();
   const userIds = await RoomUser.getUserIdsByRoomId(roomId);
-  return userIds.filter(id => id.toString() !== this._id.toString());
+  return userIds;
 };
 
-UserSchema.methods.getRoomId = async function() {
+UserSchema.methods.getRoomId = async function () {
   const roomUser = await RoomUser.findOne({ userId: this._id });
   return roomUser.roomId;
 };
 
-UserSchema.statics.getWebSocket = function(uid) {
+UserSchema.statics.getWebSocket = function (uid) {
   return usersSocket.get(uid.toString());
 };
 
-UserSchema.statics.setWebSocket = function(uid, ws) {
+UserSchema.statics.setWebSocket = function (uid, ws) {
   usersSocket.set(uid.toString(), ws);
 };
 
-UserSchema.statics.destroyWebSocket = function(uid) {
+UserSchema.statics.destroyWebSocket = function (uid) {
   const ws = usersSocket.get(uid.toString());
   if (ws) {
     ws.close();
