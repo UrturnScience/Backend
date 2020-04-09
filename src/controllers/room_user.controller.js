@@ -29,8 +29,8 @@ exports.show_room = async function (req, res) {
 };
 
 exports.show_user = async function (req, res) {
-  const roomUsers = await RoomUser.findOne({ userId: req.params.uid });
+  const roomUser = await RoomUser.findOne({ userId: req.params.uid });
   res
     .status(200)
-    .json({ roomUsers: roomUsers.map((roomUser) => roomUser.toJSON()) });
+    .json({ roomUser: roomUser && roomUser.toJSON() });
 };
