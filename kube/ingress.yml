@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: urturn-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: urturn-prod
+    networking.gke.io/managed-certificates: urturn-prod-cert
+spec:
+  backend:
+    serviceName: urturn-nodeport
+    servicePort: 80
+
