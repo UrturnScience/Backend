@@ -18,9 +18,12 @@ spec:
         ports:
         - containerPort: 3000
         env:
-        - NODE_PORT: 3000
-        - MONGODB_DBNAME: prod
-        - GOOGLE_APPLICATION_CREDENTIALS: /opt/firebase-admin-sdk-creds
+        - name: NODE_PORT
+          value: 3000
+        - name: MONGODB_DBNAME
+          value: prod
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /opt/firebase-admin-sdk-creds
         - name: FIREBASE_DATABASE_URL
           valueFrom:
             secretKeyRef:
