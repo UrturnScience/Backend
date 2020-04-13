@@ -1,0 +1,312 @@
+openapi: 3.0.0
+info:
+  title: UrTurn Backend API
+  description: This is the API to support the UrTurn frontend
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/
+    description: Dev URL
+  - url: http://34.73.238.66
+    description: Deployment URL
+paths:
+  /user/login:
+    post:
+      summary: Logs the user in
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+  /user/logout:
+    delete:
+      summary: Logs the user out
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+  /user/all:
+    get:
+      summary: Gets the list of all users
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+  /user/{userId}:
+    get:
+      summary: Gets a user with a specific ID
+      tags:
+        - users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /room/all:
+    get:
+      summary: Gets all rooms
+      tags:
+        - rooms
+      responses:
+        '200':
+          description: OK
+  /room/{roomId}:
+    get:
+      summary: Gets a room with a specific ID
+      tags:
+        - rooms
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /room/create:
+    post:
+      summary: Creates a new room
+      tags:
+        - rooms
+      responses:
+        '200':
+          description: OK
+  /room/delete/{roomId}:
+    delete:
+      summary: Deletes a room with a specific ID
+      tags:
+        - rooms
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /roomuser/add/{roomId}/{userId}:
+    post:
+      summary: Add a user to a room
+      tags:
+        - roomuser
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /roomuser/delete/{userId}:
+    delete:
+      summary: Delete a user from their room
+      tags:
+        - roomuser
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /chore/{choreId}:
+    get:
+      summary: Get chore with specific ID
+      tags:
+        - chores
+      parameters:
+        - in: path
+          name: choreId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /chore/room/{roomId}:
+    get:
+      summary: Get the chores for a specific room
+      tags:
+        - chores
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /chore/create:
+    post:
+      summary: Create a new chore
+      tags:
+        - chores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                name:
+                  type: string
+                time:
+                  type: integer
+                recurring: 
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+  /chore/update/{choreId}:
+    put:
+      summary: Update the time value of the chore
+      tags:
+        - chores
+      parameters:
+        - in: path
+          name: choreId
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+  /chore/delete/{choreId}:
+    delete:
+      summary: Delete the chore with specific ID. Also deletes from preferences and assignments
+      tags:
+        - chores
+      parameters:
+        - in: path
+          name: choreId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /assignment/createAssignments:
+    post:
+      summary: Creates assignments
+      tags:
+        - assignments
+      responses:
+        '200':
+          description: OK
+  /assignment/retireAssignments:
+    put:
+      summary: Retires assignments
+      tags:
+        - assignments
+      responses:
+        '200':
+          description: OK
+  /assignment/active/{assignmentId}:
+    put:
+      summary: Makes an assignment "active"
+      tags:
+        - assignments
+      parameters:
+        - in: path
+          name: assignmentId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /preference/update/{preferenceId}:
+    put:
+      summary: Updates the order of preferences for a user
+      tags:
+        - preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                preferenceIds:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK
+  /preference/all:
+    get:
+      summary: Gets all preferences
+      tags:
+        - preferences
+      responses:
+        '200':
+          description: OK
+  /preference/user/{userId}:
+    get:
+      summary: Gets all preferences for user
+      tags:
+        - preferences
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /preference/chore/{choreId}:
+    get:
+      summary: Gets all preferences for chore
+      tags:
+        - preferences
+      parameters:
+        - in: path
+          name: choreId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /preference/room/{roomId}:
+    get:
+      summary: Gets all preferences for room
+      tags:
+        - preferences
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /preference/{preferenceId}:
+    get:
+      summary: Gets individual preference
+      tags:
+        - preferences
+      parameters:
+        - in: path
+          name: preferenceId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK

@@ -4,3 +4,13 @@ dist
 # node
 node_modules
 npm-debug.log
+
+# env
+.env
+.env.local
+
+# firebase keys
+firebaseConfig.json
+
+# public
+public
