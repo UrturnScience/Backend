@@ -17,3 +17,25 @@ spec:
         image: gcr.io/urturn-1/urturn-image:latest
         ports:
         - containerPort: 3000
+        env:
+        - NODE_PORT: 3000
+        - MONGODB_DBNAME: prod
+        - GOOGLE_APPLICATION_CREDENTIALS: /opt/firebase-admin-sdk-creds
+        - name: FIREBASE_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: firebase-prod-url
+              key: firebase-prod-url
+        - name: MONGODB_CONNECT_STRING
+          valueFrom:
+            secretKeyRef:
+              name: mongo-prod-url
+              key: mongo-prod-url
+        volumeMounts:
+          - name: firebase-admin-sdk-creds
+            mountPath: "/opt/firebase-admin-sdk-creds"
+            readOnly: true
+      volumes:
+      - name: firebase-admin-sdk-creds
+        secret:
+            secretName: firebase-admin-sdk-creds-json
