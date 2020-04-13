@@ -23,7 +23,7 @@ spec:
         - name: MONGODB_DBNAME
           value: prod
         - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /opt/firebase-admin-sdk-creds
+          value: /opt/firebase-admin-sdk-creds/urturn-1-firebase-adminsdk-uf0mj-7d0a516f7e.json
         - name: FIREBASE_DATABASE_URL
           valueFrom:
             secretKeyRef:
