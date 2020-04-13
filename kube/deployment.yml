@@ -19,7 +19,7 @@ spec:
         - containerPort: 3000
         env:
         - name: NODE_PORT
-          value: 3000
+          value: "3000"
         - name: MONGODB_DBNAME
           value: prod
         - name: GOOGLE_APPLICATION_CREDENTIALS
