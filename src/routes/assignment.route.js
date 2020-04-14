@@ -9,11 +9,17 @@ router.put("/retireAssignments", assignment_controller.retire_assignments); //
 
 router.put("/active/:id", assignment_controller.toggle_active); //Toggle assignment's active attribute true/false, tested
 
+router.get("/:uid/:active")
+
+router.get("/:id", assignment_controller.details);
+
+router.get("/active/:uid", assignment_controller.active_user);
+
+router.get("/inactive/:uid", assignment_controller.inactive_user);
+
 // router.post("/create", assignment_controller.create);
 
 // router.get("/all", assignment_controller.show_all);
-
-// router.get("/:id", assignment_controller.details);
 
 // router.delete("/delete/:id", assignment_controller.delete);
 

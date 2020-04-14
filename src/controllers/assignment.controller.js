@@ -20,6 +20,21 @@ exports.toggle_active = async function(req, res) {
   res.sendStatus(200);
 };
 
+exports.details = async function(req, res) {
+  const assignment = await Assignment.findById(req.params.id);
+  res.status(200).json({ assignment });
+};
+
+exports.active_user = async function(req, res){
+  const assignments = await Assignment.find({userId: req.params.uid, active: true});
+  res.status(200).json({assignments});
+}
+
+exports.inactive_user = async function(req, res){
+  const assignments = await Assignment.find({userId: req.params.uid, active: false});
+  res.status(200).json({assignments});
+}
+
 // exports.create = async function(req, res) {
 //   const assignment = new Assignment({
 //     userId: req.body.userId,
@@ -35,10 +50,6 @@ exports.toggle_active = async function(req, res) {
 //   res.status(200).json({ assignments });
 // };
 
-// exports.details = async function(req, res) {
-//   const assignment = await Assignment.findById(req.params.id);
-//   res.status(200).json({ assignment });
-// };
 
 
 // exports.delete = async function(req, res) {
