@@ -9,6 +9,10 @@ router.get("/:id", chore_controller.details); //no test
 
 router.get("/room/:rid", chore_controller.show_room); //no test
 
+router.get("/upcoming/:rid", chore_controller.upcoming_chores);
+
+router.get("/active/:rid", chore_controller.active_chores);
+
 router.post("/create", chore_controller.create); //
 
 //Can only update time value
