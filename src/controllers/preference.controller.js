@@ -11,17 +11,7 @@ exports.update = async function(req, res) {
 };
 
 exports.upcoming_preferences = async function(req, res){
-  const userId = req.params.uid; //get the userid from params
-
-  //get the roomId the user is in
-  const roomUser = await RoomUser.findOne({userId: userId}); 
-  const roomId = roomUser.roomId;
-
-  //get upcoming chores for that room
-  const upcomingChoreIds = await Chore.find({roomId: roomId, upcoming: true}).distinct("_id");
-
-  //get the users preferences
-  const preferences = await Preference.find({userId: userId, choreId: {$in: upcomingChoreIds}});
+  const preferences = await PreferenceService.getUpcomingPreferences(req.params.uid);
 
   res.status(200).json({preferences});
 }

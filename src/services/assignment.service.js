@@ -42,7 +42,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     const userId = draftingOrder[i];
 
     //Get the drafter's preferences in order of their preferences
-    const userPreferences = await Preference.find({ userId: userId }).sort({weight: 1});
+    const userPreferences = await PreferenceService.getUpcomingPreferences(userId);
 
     //Get highest available chore
     const chosenChoreId = await UtilityService.findHighestUpcomingChore(
