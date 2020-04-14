@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   name: urturn-ingress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: urturn-prod
-    networking.gke.io/managed-certificates: urturn-prod-cert
+    kubernetes.io/ingress.global-static-ip-name: "urturn-prod"
+    networking.gke.io/managed-certificates: "urturn-prod-cert"
 spec:
   backend:
     serviceName: urturn-nodeport
