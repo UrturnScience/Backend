@@ -2,11 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: urturn-nodeport
+  labels:
+    app: urturn
 spec:
+  type: NodePort
   selector:
     app: urturn
-  type: NodePort
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 3000

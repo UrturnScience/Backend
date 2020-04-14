@@ -53,6 +53,9 @@ app.use("/message", messageRoutes);
 // Swagger routes
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
+// Health check for GCP stuff
+app.use("/health", (req, res) => { res.sendStatus(200); } );
+
 const server = app.listen(process.env.NODE_PORT, () =>
   console.log(`Example app listening on port ${process.env.NODE_PORT}!`)
 );
