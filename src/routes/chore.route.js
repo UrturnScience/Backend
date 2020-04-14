@@ -13,11 +13,11 @@ router.get("/upcoming/:rid", chore_controller.upcoming_chores);
 
 router.get("/active/:rid", chore_controller.active_chores);
 
-router.post("/create", chore_controller.create); //
+router.post("/create", chore_controller.create); //tested
 
 //Can only update time value
-router.put("/update/:id", chore_controller.update); 
+router.put("/update/:id", chore_controller.update); //tested
 
-router.delete("/delete/:id", chore_controller.delete); //
+router.delete("/delete/:id", chore_controller.delete); //tested
 
 module.exports = router;
