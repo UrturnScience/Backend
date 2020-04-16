@@ -13,23 +13,24 @@ exports.updatePreferences = async function(userId, preferenceIds) {
   await this.fixPreferencesByUserId(userId);
 };
 
+exports.getUpcomingPreferences = async function(userId){
+  //get the roomId the user is in
+  const roomUser = await RoomUser.findOne({userId: userId}); 
+  const roomId = roomUser.roomId;
+
+  //get upcoming chores for that room
+  const upcomingChoreIds = await Chore.find({roomId: roomId, upcoming: true}).distinct("_id");
+
+  //get the users preferences
+  const preferences = await Preference.find({userId: userId, choreId: {$in: upcomingChoreIds}}).sort({weight: 1});
+
+  return preferences;
+}
+
 exports.fixPreferencesByUserId = async function(userId) {
   //Want to fix the user's preferences in the cause of deleted chore, new chore, etc
 
-  //Want to get the the room for the user
-  const roomUser = await RoomUser.findOne({ userId: userId });
-
-  //Want to get the upcoming chores for that user's room
-  const upcomingChoreIds = await Chore.find({
-    roomId: roomUser.roomId,
-    upcoming: true
-  }).distinct("_id");
-
-  //Want to get the upcoming preferences for that user sorted ascending by their weight values
-  const upcomingPreferences = await Preference.find({
-    userId: userId,
-    choreId: { $in: upcomingChoreIds }
-  }).sort({ weight: 1 });
+  const upcomingPreferences = await this.getUpcomingPreferences(userId);
 
   //Ensures that the preference weights for the user are unique and ascending without gaps from 0
   //Since we have the preferences sorted initially by weight, we can preserve the relative order that was saved from before
