@@ -16,21 +16,24 @@ async function messageUser(userId, msg) {
   }
 }
 
-async function messageUsers(userIds, msg) {
+async function messageUsers(userIds, msg, giftedId) {
+  msg.giftedId = giftedId;
   const data = JSON.stringify(msg);
   return Promise.all(userIds.map(userId => messageUser(userId, data)));
 }
 
 function setupMessagingEvents(ws) {
   ws.on("message", async data => {
+    const dataJson = JSON.parse(data);
+
     const message = new Message({
-      data,
+      data: dataJson.message,
       senderId: ws.user._id,
       roomId: await ws.user.getRoomId()
     });
 
     const roommateIds = await ws.user.getRoommateIds();
-    messageUsers(roommateIds, message.toJSON());
+    messageUsers(roommateIds, message.toJSON(), dataJson.giftedId);
 
     await message.save();
   });
