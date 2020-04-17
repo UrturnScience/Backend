@@ -20,12 +20,7 @@ UserSchema.methods.getFirebaseUser = function () {
 
 UserSchema.methods.getRoommateIds = async function () {
   const roomId = await this.getRoomId();
-  let userIds = await RoomUser.getUserIdsByRoomId(roomId);
-  
-  const index = userIds.findIndex(e => String(e) == String(this._id));
-  if (index > -1) {
-    userIds.splice(index, 1);
-  }
+  const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
   return userIds;
 };
