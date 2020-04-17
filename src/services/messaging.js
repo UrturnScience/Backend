@@ -1,8 +1,13 @@
 const User = require("../models/user.model");
 const Message = require("../models/message.model");
 const mongoose = require("mongoose");
+const { Expo } = require("expo-server-sdk");
 
-function pushNotification(userId) {}
+let expo = new Expo();
+
+function pushNotification(userId) {
+  
+}
 
 async function messageUser(userId, msg) {
   const ws = User.getWebSocket(userId);
@@ -18,15 +23,15 @@ async function messageUser(userId, msg) {
 
 async function messageUsers(userIds, msg) {
   const data = JSON.stringify(msg);
-  return Promise.all(userIds.map(userId => messageUser(userId, data)));
+  return Promise.all(userIds.map((userId) => messageUser(userId, data)));
 }
 
 function setupMessagingEvents(ws) {
-  ws.on("message", async data => {
+  ws.on("message", async (data) => {
     const message = new Message({
       data,
       senderId: ws.user._id,
-      roomId: await ws.user.getRoomId()
+      roomId: await ws.user.getRoomId(),
     });
 
     const roommateIds = await ws.user.getRoommateIds();

@@ -12,6 +12,7 @@ const UserSchema = new Schema({
     unique: true,
     index: true,
   },
+  expoPushTokens: [String],
 });
 
 UserSchema.methods.getFirebaseUser = function () {
