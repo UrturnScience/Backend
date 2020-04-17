@@ -17,14 +17,14 @@ async function messageUser(userId, msg) {
 }
 
 async function messageUsers(userIds, msg, giftedId) {
-  msg._id = giftedId;
+  msg.giftedId = giftedId;
   const data = JSON.stringify(msg);
   return Promise.all(userIds.map(userId => messageUser(userId, data)));
 }
 
 function setupMessagingEvents(ws) {
   ws.on("message", async data => {
-    dataJson = JSON.parse(data);
+    const dataJson = JSON.parse(data);
 
     const message = new Message({
       data: dataJson.message,
