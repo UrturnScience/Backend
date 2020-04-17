@@ -1,23 +1,18 @@
+const mongoose = require("mongoose");
+
 const User = require("../models/user.model");
 const Message = require("../models/message.model");
-const mongoose = require("mongoose");
-const { Expo } = require("expo-server-sdk");
-
-let expo = new Expo();
-
-function pushNotification(userId) {
-  
-}
+const { sendPushNotif } = require("./notif");
 
 async function messageUser(userId, msg) {
+  const user = User.findById(userId);
   const ws = User.getWebSocket(userId);
 
   if (ws) {
     ws.send(msg);
   } else {
-    /**
-     * TODO: send push notification to user
-     */
+    const tickets = await sendPushNotif(msg, user.expoPushTokens);
+    console.log(tickets);
   }
 }
 
