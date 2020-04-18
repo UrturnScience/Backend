@@ -41,7 +41,6 @@ test.serial(
       .send({ token: expoToken });
 
     const userRecord = await User.findById(res.body.user._id);
-    console.log(userRecord);
     t.is(userRecord.expoPushTokens.length, 1);
     t.is(userRecord.expoPushTokens[0], expoToken);
   }
