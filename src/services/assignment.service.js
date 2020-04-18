@@ -7,14 +7,14 @@ const RoomUser = require("../models/room_user.model");
 const PreferenceService = require("./preference.service");
 const UtilityService = require("./utility_functions.service");
 
-exports.createAssignments = async function() {
+exports.createAssignments = async function () {
   const rooms = await Room.find({});
   for (let i = 0; i < rooms.length; ++i) {
     await this.createAssignmentsByRoomId(rooms[i].id);
   }
 };
 
-exports.createAssignmentsByRoomId = async function(roomId) {
+exports.createAssignmentsByRoomId = async function (roomId) {
   //For a given room, want to create the assignments for the upcoming week(and handle housekeeping)
   //Algorithm:
   //Simulate a draft between users given their preferences
@@ -24,7 +24,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
   //Get the chores for that room that are "upcoming" for the week to be assigned
   const upcomingChores = await Chore.find({
     roomId: roomId,
-    upcoming: true
+    upcoming: true,
   });
 
   //Keep track of chosen chores, keep them as the toString version of the objectids
@@ -34,7 +34,10 @@ exports.createAssignmentsByRoomId = async function(roomId) {
   const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
   //Creates a shuffled array of userIds from a copy
-  const draftingOrder = await UtilityService.getDraftingOrder(userIds, upcomingChores.length);
+  const draftingOrder = await UtilityService.getDraftingOrder(
+    userIds,
+    upcomingChores.length
+  );
 
   //Working through the drafting order, select the highest rated chore upcoming for the user
   for (let i = 0; i < draftingOrder.length; ++i) {
@@ -42,7 +45,9 @@ exports.createAssignmentsByRoomId = async function(roomId) {
     const userId = draftingOrder[i];
 
     //Get the drafter's preferences in order of their preferences
-    const userPreferences = await Preference.find({ userId: userId }).sort({weight: 1});
+    const userPreferences = await PreferenceService.getUpcomingPreferences(
+      userId
+    );
 
     //Get highest available chore
     const chosenChoreId = await UtilityService.findHighestUpcomingChore(
@@ -55,7 +60,7 @@ exports.createAssignmentsByRoomId = async function(roomId) {
       choreId: chosenChoreId,
       userId: userId,
       active: true,
-      successful: false
+      successful: false,
     });
     await assignment.save();
 
@@ -82,14 +87,14 @@ exports.createAssignmentsByRoomId = async function(roomId) {
   await PreferenceService.fixPreferencesByRoomId(roomId);
 };
 
-exports.retireAssignments = async function() {
+exports.retireAssignments = async function () {
   const roomIds = await Room.find({}).distinct("_id");
   for (let i = 0; i < roomIds.length; ++i) {
     await this.retireAssignmentsByRoomId(roomIds[i]);
   }
 };
 
-exports.retireAssignmentsByRoomId = async function(roomId) {
+exports.retireAssignmentsByRoomId = async function (roomId) {
   //Want to convert all assignments and chores in this room to have "Active" == False
   const chores = await Chore.find({ roomId: roomId, active: true });
   for (let i = 0; i < chores.length; ++i) {
@@ -98,7 +103,7 @@ exports.retireAssignmentsByRoomId = async function(roomId) {
 
     const assignment = await Assignment.findOne({
       choreId: chores[i].id,
-      active: true
+      active: true,
     });
     assignment.active = false;
     await assignment.save();

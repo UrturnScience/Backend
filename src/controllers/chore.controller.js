@@ -33,3 +33,13 @@ exports.delete = async function(req, res) {
   await ChoreService.retireOrDeleteChoreAndPreferencesAndAssignments(req.params.id);
   res.sendStatus(200);
 };
+
+exports.upcoming_chores = async function(req, res){
+  const chores = await Chore.find({roomId: req.params.rid, upcoming: true});
+  res.status(200).json({chores});
+}
+
+exports.active_chores = async function(req, res){
+  const chores = await Chore.find({roomId: req.params.rid, active: true});
+  res.status(200).json({chores});
+}

@@ -8,10 +8,8 @@ const Room = require("../../src/models/room.model");
 
 const {clearUsers} = require("./firebase");
 
-
-
-exports.dropDatabase = function(){
-  return mongoose.connection.db.dropDatabase();
+exports.dropDatabase = async function(){
+  return await mongoose.connection.db.dropDatabase();
 }
 
 exports.clearDatabase = function(){
