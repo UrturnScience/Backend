@@ -146,13 +146,12 @@ test.serial("POST /assignment/retireAssignments", async (t) => {
   const upcomingChores1 = await Chore.find({ upcoming: true });
   const activeChores1 = await Chore.find({ active: true });
 
-  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room1.id));
-  t.truthy(assignments1.length == 4);
-  t.truthy(activeAssignments1.length == 4);
-  t.truthy(chores1.length == 5);
-  t.truthy(upcomingChores1.length == 2);
-  t.truthy(activeChores1.length == 4);
-  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room1.id));
+  t.true(await PreferenceChecker.validateUserPreferencesByRoomId(room1.id));
+  t.is(assignments1.length, 4);
+  t.is(activeAssignments1.length, 4);
+  t.is(chores1.length, 5);
+  t.is(upcomingChores1.length, 2);
+  t.is(activeChores1.length, 4);
 
   //PART 2
 
@@ -185,11 +184,11 @@ test.serial("POST /assignment/retireAssignments", async (t) => {
   const inactiveChores2 = await Chore.find({ active: false });
   const upcomingChores2 = await Chore.find({ upcoming: true });
 
-  t.truthy(assignments2.length == 7);
-  t.truthy(inactiveAssignments2.length == 4); //4 retired from last iteration
-  t.truthy(nonsuccessAssignments2.length == 7); //6 nonsuccessful(default state)
-  t.truthy(chores2.length == 6);
-  t.truthy(inactiveChores2.length == 3);
-  t.truthy(upcomingChores2.length == 2);
-  t.truthy(await PreferenceChecker.validateUserPreferencesByRoomId(room1.id));
+  t.is(assignments2.length, 7);
+  t.is(inactiveAssignments2.length, 4); //4 retired from last iteration
+  t.is(nonsuccessAssignments2.length, 7); //6 nonsuccessful(default state)
+  t.is(chores2.length, 6);
+  t.is(inactiveChores2.length, 3);
+  t.is(upcomingChores2.length, 2);
+  t.true(await PreferenceChecker.validateUserPreferencesByRoomId(room1.id));
 });

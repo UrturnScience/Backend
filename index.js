@@ -62,14 +62,14 @@ app.use("/health", (req, res) => {
 // Cron job for weekly assignment creation @ 12AM CST on Monday
 const AssignmentService = require("./src/services/assignment.service");
 const job = new cron.CronJob(
-  "0 0 1 * * 1",
+  "0 0 0 * * 1",
   async function () {
     await AssignmentService.processAssignmentCycle();
     console.log("Assignment Cycle Processed");
   },
   null,
   true,
-  "America/New_York"
+  "America/Chicago"
 );
 job.start();
 
