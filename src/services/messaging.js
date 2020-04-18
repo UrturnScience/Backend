@@ -18,6 +18,7 @@ async function messageUser(senderEmail, userId, body, data) {
       data,
     };
     const tickets = await sendPushNotif(pushNotif, user);
+    // TODO: process the tickets here:
   }
 }
 
