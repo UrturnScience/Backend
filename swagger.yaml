@@ -5,9 +5,9 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:3000/
-    description: Dev URL
-  - url: http://34.73.238.66
-    description: Deployment URL
+    description: Development URL
+  - url: https://urturn.fwren.ch/
+    description: Production URL
 paths:
   /user/login:
     post:
@@ -144,6 +144,32 @@ paths:
       responses:
         '200':
           description: OK
+  /chore/upcoming/{roomId}:
+    get:
+      summary: Get all upcoming chores for a room
+      tags:
+        - chores
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /chore/active/{roomId}:
+    get:
+      summary: Get all current chores for the week
+      tags:
+        - chores
+      parameters:
+        - in: path
+          name: roomId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
   /chore/create:
     post:
       summary: Create a new chore
@@ -202,6 +228,14 @@ paths:
       responses:
         '200':
           description: OK
+  /assignment/assignmentCycle:
+    post:
+      summary: Creates assignments
+      tags:
+        - assignments
+      responses:
+        '200':
+          description: OK
   /assignment/createAssignments:
     post:
       summary: Creates assignments
@@ -231,11 +265,55 @@ paths:
       responses:
         '200':
           description: OK
-  /preference/update/{preferenceId}:
+  /assignment/{assignmentId}:
+    get:
+      summary: Get assignment
+      tags:
+        - assignments
+      parameters:
+        - in: path
+          name: assignmentId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /assignment/active/{userId}:
+    get:
+      summary: Gets all current active assignments for the user
+      tags:
+        - assignments
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /assignment/active/{userId}:
+    get:
+      summary: Get all past assignments for user
+      tags:
+        - assignments
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+  /preference/update/{userId}:
     put:
       summary: Updates the order of preferences for a user
       tags:
         - preferences
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
       requestBody:
         required: true
         content:
@@ -250,48 +328,14 @@ paths:
       responses:
         '200':
           description: OK
-  /preference/all:
+  /preference/upcoming/{userId}:
     get:
-      summary: Gets all preferences
-      tags:
-        - preferences
-      responses:
-        '200':
-          description: OK
-  /preference/user/{userId}:
-    get:
-      summary: Gets all preferences for user
+      summary: Gets all preferences for corresponding upcoming chores for the week for user
       tags:
         - preferences
       parameters:
         - in: path
           name: userId
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-  /preference/chore/{choreId}:
-    get:
-      summary: Gets all preferences for chore
-      tags:
-        - preferences
-      parameters:
-        - in: path
-          name: choreId
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-  /preference/room/{roomId}:
-    get:
-      summary: Gets all preferences for room
-      tags:
-        - preferences
-      parameters:
-        - in: path
-          name: roomId
           required: true
           type: string
       responses:
