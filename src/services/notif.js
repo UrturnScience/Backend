@@ -15,12 +15,8 @@ async function sendPushNotif(message, pushTokens) {
     }
 
     // Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications)
-    messages.push({
-      to: pushToken,
-      sound: "default",
-      body: "This is a test notification",
-      data: message,
-    });
+    message.to = pushToken;
+    messages.push(message);
   }
 
   let chunks = expo.chunkPushNotifications(messages);

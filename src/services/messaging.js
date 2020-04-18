@@ -4,22 +4,30 @@ const User = require("../models/user.model");
 const Message = require("../models/message.model");
 const { sendPushNotif } = require("./notif");
 
-async function messageUser(userId, msg) {
-  const user = User.findById(userId);
+async function messageUser(senderEmail, userId, msg) {
+  const user = await User.findById(userId);
   const ws = User.getWebSocket(userId);
 
   if (ws) {
     ws.send(msg);
   } else {
-    const tickets = await sendPushNotif(msg, user.expoPushTokens);
+    const pushNotif = {
+      sound: "default",
+      title: senderEmail,
+      body: msg.data,
+      data: msg,
+    };
+    const tickets = await sendPushNotif(pushNotif, user.expoPushTokens);
     console.log(tickets);
   }
 }
 
-async function messageUsers(userIds, msg, giftedId) {
+async function messageUsers(senderEmail, userIds, msg, giftedId) {
   msg.giftedId = giftedId;
   const data = JSON.stringify(msg);
-  return Promise.all(userIds.map((userId) => messageUser(userId, data)));
+  return Promise.all(
+    userIds.map((userId) => messageUser(senderEmail, userId, data))
+  );
 }
 
 function setupMessagingEvents(ws) {
@@ -32,8 +40,14 @@ function setupMessagingEvents(ws) {
       roomId: await ws.user.getRoomId(),
     });
 
+    const firebaseUser = await ws.user.getFirebaseUser();
     const roommateIds = await ws.user.getRoommateIds();
-    messageUsers(roommateIds, message.toJSON(), dataJson.giftedId);
+    messageUsers(
+      firebaseUser.email,
+      roommateIds,
+      message.toJSON(),
+      dataJson.giftedId
+    );
 
     await message.save();
   });
