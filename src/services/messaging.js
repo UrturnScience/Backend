@@ -17,7 +17,7 @@ async function messageUser(senderEmail, userId, body, data) {
       body,
       data,
     };
-    const tickets = await sendPushNotif(pushNotif, user.expoPushTokens);
+    const tickets = await sendPushNotif(pushNotif, user);
   }
 }
 

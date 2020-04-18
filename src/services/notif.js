@@ -2,7 +2,9 @@ const { Expo } = require("expo-server-sdk");
 
 let expo = new Expo();
 
-async function sendPushNotif(message, pushTokens) {
+async function sendPushNotif(message, user) {
+  const pushTokens = user.expoPushTokens;
+
   // Create the messages that you want to send to clients
   let messages = [];
   for (let pushToken of pushTokens) {
@@ -10,14 +12,16 @@ async function sendPushNotif(message, pushTokens) {
 
     // Check that all your push tokens appear to be valid Expo push tokens
     if (!Expo.isExpoPushToken(pushToken)) {
-      console.error(`Push token ${pushToken} is not a valid Expo push token`);
-      continue;
+      // remove it from user
+      user.expoPushTokens.remove(pushToken);
+    } else {
+      // Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications)
+      message.to = pushToken;
+      messages.push(message);
     }
-
-    // Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications)
-    message.to = pushToken;
-    messages.push(message);
   }
+
+  await user.save(); // save if needed to remove push tokens
 
   let chunks = expo.chunkPushNotifications(messages);
   let tickets = [];
