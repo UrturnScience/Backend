@@ -4,6 +4,8 @@ metadata:
   name: urturn-nodeport
   labels:
     app: urturn
+  annotations:
+    beta.cloud.google.com/backend-config: '{"ports": {"80":"urturn-backendconfig"}}'
 spec:
   type: NodePort
   selector:
