@@ -3,7 +3,7 @@ const router = express.Router();
 
 const assignment_controller = require("../controllers/assignment.controller");
 
-router.post("/assignmentCycle", assignment_controller.assignment_cycle); 
+router.post("/assignmentCycle", assignment_controller.assignment_cycle);
 
 router.post("/createAssignments", assignment_controller.create_assignments); //tested
 
