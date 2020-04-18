@@ -4,21 +4,20 @@ const User = require("../models/user.model");
 const Message = require("../models/message.model");
 const { sendPushNotif } = require("./notif");
 
-async function messageUser(senderEmail, userId, msg) {
+async function messageUser(senderEmail, userId, body, data) {
   const user = await User.findById(userId);
   const ws = User.getWebSocket(userId);
 
   if (ws) {
-    ws.send(msg);
+    ws.send(data);
   } else {
     const pushNotif = {
       sound: "default",
       title: senderEmail,
-      body: msg.data,
-      data: msg,
+      body,
+      data,
     };
     const tickets = await sendPushNotif(pushNotif, user.expoPushTokens);
-    console.log(tickets);
   }
 }
 
@@ -26,7 +25,7 @@ async function messageUsers(senderEmail, userIds, msg, giftedId) {
   msg.giftedId = giftedId;
   const data = JSON.stringify(msg);
   return Promise.all(
-    userIds.map((userId) => messageUser(senderEmail, userId, data))
+    userIds.map((userId) => messageUser(senderEmail, userId, msg.data, data))
   );
 }
 

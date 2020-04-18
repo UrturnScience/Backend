@@ -41,6 +41,13 @@ exports.createExpoNotifToken = async function (req, res) {
   res.sendStatus(200);
 };
 
+exports.removeExpoNotifToken = async function (req, res) {
+  const user = await User.findById(req.session.userId);
+  user.expoPushTokens.pull(req.body.token);
+  await user.save();
+  res.sendStatus(200);
+};
+
 // exports.update = async function(req, res) {
 //   const user = await User.findByIdAndUpdate(req.params.id, { $set: req.body });
 //   res.status(200).json({ user });

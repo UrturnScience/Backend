@@ -94,3 +94,29 @@ test.serial("DELETE /user/logout", async (t) => {
 
   t.pass();
 });
+
+test.serial(
+  "DELETE /user/expoPushNotificationToken should remove the token to the user array",
+  async (t) => {
+    await setupCurrentUser("test@test.com", "password");
+    const token = await firebase.auth().currentUser.getIdToken();
+    const agent = request.agent(app);
+    const expoToken = "this is a test token";
+
+    const res = await agent.post("/user/login").set("Authorization", token);
+
+    await agent
+      .post("/user/expoPushNotificationToken")
+      .send({ token: expoToken });
+
+    await agent.post("/user/expoPushNotificationToken").send({ token: "temp" });
+
+    await agent
+      .delete("/user/expoPushNotificationToken")
+      .send({ token: expoToken });
+
+    const userRecord = await User.findById(res.body.user._id);
+    t.is(userRecord.expoPushTokens.length, 1);
+    t.is(userRecord.expoPushTokens[0], "temp");
+  }
+);
