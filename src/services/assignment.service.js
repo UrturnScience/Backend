@@ -7,6 +7,16 @@ const RoomUser = require("../models/room_user.model");
 const PreferenceService = require("./preference.service");
 const UtilityService = require("./utility_functions.service");
 
+exports.processAssignmentCycle = async function () {
+  //Function to retire the assignments from last week, then to create assignments for upcoming week
+  const roomIds = await Room.find({}).distinct("_id");
+  for (let i = 0; i < roomIds.length; ++i) {
+    await this.retireAssignmentsByRoomId(roomIds[i]);
+    await this.createAssignmentsByRoomId(roomIds[i]);
+  }
+  //console.log("Assignment Cycle Completed - processAssignmentCycle()");
+};
+
 exports.createAssignments = async function () {
   const rooms = await Room.find({});
   for (let i = 0; i < rooms.length; ++i) {
@@ -20,6 +30,9 @@ exports.createAssignmentsByRoomId = async function (roomId) {
   //Simulate a draft between users given their preferences
   //Will utilize a snake draft(with the initial list scrambled each time)
   //Following the drafting order, the drafter will get their highest choice of upcoming chores
+
+  //Safety function to ensure preferences aren't messed up before processing assignments
+  await PreferenceService.fixPreferencesByRoomId(roomId);
 
   //Get the chores for that room that are "upcoming" for the week to be assigned
   const upcomingChores = await Chore.find({

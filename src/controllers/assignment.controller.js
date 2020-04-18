@@ -2,6 +2,11 @@ const Assignment = require("../models/assignment.model");
 
 const AssignmentService = require("../services/assignment.service");
 
+exports.assignment_cycle = async function(req, res){
+  await AssignmentService.processAssignmentCycle();
+  res.sendStatus(200);
+}
+
 exports.create_assignments = async function(req, res){
   await AssignmentService.createAssignments();
   res.sendStatus(200);

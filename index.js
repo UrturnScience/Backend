@@ -5,6 +5,7 @@ const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 const errorMiddleware = require("./src/errorHandling");
 const bodyParser = require("body-parser");
+const cron = require("cron");
 
 require("./src/services/firebaseSetup");
 const { setupDB } = require("./src/services/dbSetup");
@@ -55,6 +56,14 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Health check for GCP stuff
 app.use("/health", (req, res) => { res.sendStatus(200); } );
+
+// Cron job for weekly assignment creation @ 12AM CST on Monday
+const AssignmentService = require("./src/services/assignment.service");
+const job = new cron.CronJob('0 0 1 * * 1', async function() {
+  await AssignmentService.processAssignmentCycle();
+  console.log("Assignment Cycle Processed");
+}, null, true, 'America/New_York');
+job.start();
 
 const server = app.listen(process.env.NODE_PORT, () =>
   console.log(`Example app listening on port ${process.env.NODE_PORT}!`)
