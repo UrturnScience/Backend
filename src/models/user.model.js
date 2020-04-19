@@ -12,6 +12,8 @@ const UserSchema = new Schema({
     unique: true,
     index: true,
   },
+  // TODO: limit size of push tokens
+  expoPushTokens: [String], 
 });
 
 UserSchema.methods.getFirebaseUser = function () {
