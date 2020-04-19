@@ -12,10 +12,10 @@ exports.retire_assignments = async function(req, res){
   res.sendStatus(200);
 }
 
-exports.toggle_active = async function(req, res) {
-  //Should flip assignment's active status
+exports.toggle_successful = async function(req, res) {
+  //Should flip assignment's successful status
   const assignment = await Assignment.findOne({_id: req.params.id});
-  assignment.active = !(assignment.active);
+  assignment.successful = !(assignment.successful);
   await assignment.save();
   res.sendStatus(200);
 };
