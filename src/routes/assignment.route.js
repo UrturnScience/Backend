@@ -9,7 +9,7 @@ router.post("/createAssignments", assignment_controller.create_assignments); //t
 
 router.put("/retireAssignments", assignment_controller.retire_assignments); //tested
 
-router.put("/active/:id", assignment_controller.toggle_active); //Toggle assignment's active attribute true/false, tested
+router.put("/successful/:id", assignment_controller.toggle_successful); //Toggle assignment's successful attribute true/false, tested
 
 router.get("/:id", assignment_controller.details); //no test
 
