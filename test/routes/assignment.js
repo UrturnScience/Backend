@@ -44,6 +44,6 @@ test.serial("PUT /assignment/successful/:id", async t => {
   assignment1 = await Assignment.findOne({ _id: assignment1.id });
   assignment2 = await Assignment.findOne({ _id: assignment2.id });
 
-  t.truthy(assignment1.successful == false);
-  t.truthy(assignment2.successful == true);
+  t.is(assignment1.successful, false);
+  t.is(assignment2.successful, true);
 });
