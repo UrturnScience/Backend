@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Room = require("../models/room.model");
+const RoomUser = require("../models/room_user.model");
 const Message = require("../models/message.model");
 const { messageUsers } = require("./messaging");
 
@@ -16,7 +16,7 @@ async function botMessageRoom(roomId, msgText, isSystemMsg) {
     msgJSON.system = isSystemMsg;
   }
 
-  const userIds = await Room.getUserIdsByRoomId(roomId);
+  const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
   messageUsers("bot", userIds, msgJSON, "-1");
 
