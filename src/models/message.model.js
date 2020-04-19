@@ -18,6 +18,11 @@ const MessageSchema = new Schema(
       required: true,
       ref: "User",
       index: true
+    },
+    newMessageCount:{
+      type: Number,
+      required: true
+
     }
   },
   { timestamps: true }

@@ -38,6 +38,7 @@ function setupMessagingEvents(ws) {
       data: dataJson.message,
       senderId: ws.user._id,
       roomId: await ws.user.getRoomId(),
+      newMessageCount:2 
     });
 
     const firebaseUser = await ws.user.getFirebaseUser();
