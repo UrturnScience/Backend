@@ -70,6 +70,8 @@ exports.reportAssignment = async function (req, res) {
   }
 
   await botMessageRoom(roomId, { data: msgText });
+
+  res.sendStatus(200);
 };
 
 // exports.create = async function(req, res) {
