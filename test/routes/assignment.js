@@ -1,27 +1,30 @@
 const test = require("ava");
 const request = require("supertest");
 const { dropDatabase, clearDatabase } = require("../util/database");
+const { clearUsers, setupFirebaseClient } = require("../util/firebase");
 const app = require("../util/app");
 const create_models = require("../util/create_models");
 
 const Assignment = require("../../src/models/assignment.model");
 const Chore = require("../../src/models/chore.model");
 
-test.before(t => {});
+test.before((t) => {
+  setupFirebaseClient();
+});
 
-test.after(async t => {
+test.after(async (t) => {
   await dropDatabase();
 });
 
-test.beforeEach(async t => {
+test.beforeEach(async (t) => {
   await clearDatabase();
 });
 
-test.afterEach(async t => {
+test.afterEach(async (t) => {
   await clearDatabase();
 });
 
-test.serial("PUT /assignment/successful/:id", async t => {
+test.serial("PUT /assignment/successful/:id", async (t) => {
   const user = await create_models.create_user("123");
   const room = await create_models.create_room();
   const chore = await create_models.create_chore(room.id, "Hello", 5);
@@ -46,4 +49,26 @@ test.serial("PUT /assignment/successful/:id", async t => {
 
   t.is(assignment1.successful, false);
   t.is(assignment2.successful, true);
+});
+
+test.serial("POST /assignment/report/:id", async (t) => {
+  const user = await create_models.create_user("123");
+  const room = await create_models.create_room();
+  const roomUser = await create_models.create_room_user(room._id, user._id);
+  const chore = await create_models.create_chore(room.id, "Hello", 5);
+
+  let assignment1 = await create_models.create_assignment(chore.id, user.id);
+  assignment1.successful = true;
+  assignment1.save(); //active = false
+
+  const res1 = await request(app)
+    .post("/assignment/report/" + assignment1.id)
+    .send({ status: "late" })
+    .expect(200);
+  const res2 = await request(app)
+    .post("/assignment/report/" + assignment1.id)
+    .send({ status: "wrong" })
+    .expect(200);
+
+  t.pass();
 });

@@ -13,6 +13,8 @@ async function setupCurrentUser(email, password) {
     firebaseId: firebase.auth().currentUser.uid
   });
   await user.save();
+
+  return user;
 }
 
 async function clearUsers() {

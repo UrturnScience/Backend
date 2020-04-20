@@ -23,6 +23,7 @@ async function messageUser(senderEmail, userId, body, data) {
 }
 
 async function messageUsers(senderEmail, userIds, msg, giftedId) {
+  msg.senderEmail = senderEmail;
   msg.giftedId = giftedId;
   const data = JSON.stringify(msg);
   return Promise.all(
@@ -53,4 +54,4 @@ function setupMessagingEvents(ws) {
   });
 }
 
-module.exports = { setupMessagingEvents };
+module.exports = { setupMessagingEvents, messageUsers, messageUser };
