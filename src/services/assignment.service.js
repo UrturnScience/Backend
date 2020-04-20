@@ -101,7 +101,11 @@ exports.createAssignmentsByRoomId = async function (roomId) {
   await PreferenceService.fixPreferencesByRoomId(roomId);
 
   //Send bot notification
-  await botMessageRoom(roomId, "Your weekly assignments have been updated!", true);
+  await botMessageRoom(
+    roomId,
+    { data: "Your weekly assignments have been updated!" },
+    false
+  );
 };
 
 exports.retireAssignments = async function () {

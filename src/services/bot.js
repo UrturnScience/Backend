@@ -5,9 +5,9 @@ const { messageUsers } = require("./messaging");
 
 const BOT_ID = mongoose.Types.ObjectId("000000000000000000000000");
 
-async function botMessageRoom(roomId, msgText, isSystemMsg) {
+async function botMessageRoom(roomId, msgObj, isSystemMsg) {
   const message = new Message({
-    data: msgText,
+    ...msgObj,
     senderId: BOT_ID,
     roomId,
   });
