@@ -7,6 +7,8 @@ router.post("/assignmentCycle", assignment_controller.assignment_cycle);
 
 router.post("/createAssignments", assignment_controller.create_assignments); //tested
 
+router.post("/report/:id", assignment_controller.reportAssignment);
+
 router.put("/retireAssignments", assignment_controller.retire_assignments); //tested
 
 router.put("/successful/:id", assignment_controller.toggle_successful); //Toggle assignment's successful attribute true/false, tested

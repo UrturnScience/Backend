@@ -6,6 +6,7 @@ const RoomUser = require("../models/room_user.model");
 
 const PreferenceService = require("./preference.service");
 const UtilityService = require("./utility_functions.service");
+const { botMessageRoom } = require("./bot");
 
 exports.processAssignmentCycle = async function () {
   //Function to retire the assignments from last week, then to create assignments for upcoming week
@@ -98,6 +99,13 @@ exports.createAssignmentsByRoomId = async function (roomId) {
 
   //Fix the preference ordering since some chores were removed from the upcoming preference list
   await PreferenceService.fixPreferencesByRoomId(roomId);
+
+  //Send bot notification
+  await botMessageRoom(
+    roomId,
+    { data: "Your weekly assignments have been updated!" },
+    false
+  );
 };
 
 exports.retireAssignments = async function () {
