@@ -59,4 +59,15 @@ exports.removeUserFromRoomAndDeletePreferencesAndAssignments = async function (
 
   //Remove the user from the room
   await RoomUser.deleteOne({ userId: userId });
+
+  //notify room that user has left
+  const user = await User.findById(body.uid);
+  const firebaseUser = await user.getFirebaseUser();
+  const userEmail = await botMessageRoom(
+    body.rid,
+    {
+      data: `${firebaseUser.email} left the room.`,
+    },
+    true
+  );
 };
