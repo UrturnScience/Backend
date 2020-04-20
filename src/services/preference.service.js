@@ -3,7 +3,7 @@ const Chore = require("../models/chore.model");
 const RoomUser = require("../models/room_user.model");
 
 //Updates the user's preferences to match the ordering given by the user(used for preference.update controller)
-exports.updatePreferences = async function(userId, preferenceIds) {
+exports.updatePreferences = async function (userId, preferenceIds) {
   for (let i = 0; i < preferenceIds.length; ++i) {
     const preference = await Preference.findOne({ _id: preferenceIds[i] });
     preference.weight = i;
@@ -13,21 +13,27 @@ exports.updatePreferences = async function(userId, preferenceIds) {
   await this.fixPreferencesByUserId(userId);
 };
 
-exports.getUpcomingPreferences = async function(userId){
+exports.getUpcomingPreferences = async function (userId) {
   //get the roomId the user is in
-  const roomUser = await RoomUser.findOne({userId: userId}); 
+  const roomUser = await RoomUser.findOne({ userId: userId });
   const roomId = roomUser.roomId;
 
   //get upcoming chores for that room
-  const upcomingChoreIds = await Chore.find({roomId: roomId, upcoming: true}).distinct("_id");
+  const upcomingChoreIds = await Chore.find({
+    roomId: roomId,
+    upcoming: true,
+  }).distinct("_id");
 
   //get the users preferences
-  const preferences = await Preference.find({userId: userId, choreId: {$in: upcomingChoreIds}}).sort({weight: 1});
+  const preferences = await Preference.find({
+    userId: userId,
+    choreId: { $in: upcomingChoreIds },
+  }).sort({ weight: 1 });
 
   return preferences;
-}
+};
 
-exports.fixPreferencesByUserId = async function(userId) {
+exports.fixPreferencesByUserId = async function (userId) {
   //Want to fix the user's preferences in the cause of deleted chore, new chore, etc
 
   const upcomingPreferences = await this.getUpcomingPreferences(userId);
@@ -40,7 +46,7 @@ exports.fixPreferencesByUserId = async function(userId) {
   }
 };
 
-exports.fixPreferencesByRoomId = async function(roomId) {
+exports.fixPreferencesByRoomId = async function (roomId) {
   const userIds = await RoomUser.find({ roomId: roomId }).distinct("userId");
   for (let i = 0; i < userIds.length; ++i) {
     await this.fixPreferencesByUserId(userIds[i]);
