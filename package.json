@@ -33,6 +33,7 @@
     "firebase-admin": "^8.10.0",
     "mongoose": "^5.9.2",
     "swagger-ui-express": "^4.1.4",
+    "uuid": "^7.0.3",
     "ws": "^7.2.3",
     "yamljs": "^0.3.0"
   },
