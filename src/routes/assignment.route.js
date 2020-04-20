@@ -15,6 +15,8 @@ router.put("/successful/:id", assignment_controller.toggle_successful); //Toggle
 
 router.get("/:id", assignment_controller.details); //no test
 
+router.get("/room/:rid", assignment_controller.details_room); //no test
+
 router.get("/active/:uid", assignment_controller.active_user);
 
 router.get("/inactive/:uid", assignment_controller.inactive_user);
