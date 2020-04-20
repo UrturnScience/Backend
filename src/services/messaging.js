@@ -43,6 +43,7 @@ function setupMessagingEvents(ws) {
 
     const firebaseUser = await ws.user.getFirebaseUser();
     const roommateIds = await ws.user.getRoommateIds();
+
     messageUsers(
       firebaseUser.email,
       roommateIds,
