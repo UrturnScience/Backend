@@ -21,12 +21,6 @@ router.get("/active/:uid", assignment_controller.active_user);
 
 router.get("/inactive/:uid", assignment_controller.inactive_user);
 
-router.get("/:id", assignment_controller.details); //no test
-
-router.get("/active/:uid", assignment_controller.active_user);
-
-router.get("/inactive/:uid", assignment_controller.inactive_user);
-
 // router.post("/create", assignment_controller.create);
 
 // router.get("/all", assignment_controller.show_all);
