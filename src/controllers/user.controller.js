@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const admin = require("firebase-admin");
 
-exports.login = async function(req, res) {
+exports.login = async function (req, res) {
   const decodedToken = await admin
     .auth()
     .verifyIdToken(req.headers.authorization);
@@ -16,22 +16,36 @@ exports.login = async function(req, res) {
   res.status(200).json({ user });
 };
 
-exports.logout = async function(req, res) {
+exports.logout = async function (req, res) {
   User.destroyWebSocket(req.session.userId);
 
-  req.session.destroy(function() {
+  req.session.destroy(function () {
     res.sendStatus(200);
   });
 };
 
-exports.show_all = async function(req, res) {
+exports.show_all = async function (req, res) {
   const users = await User.find({});
   res.status(200).json({ users });
 };
 
-exports.details = async function(req, res) {
+exports.details = async function (req, res) {
   const user = await User.findById(req.params.id);
   res.status(200).json({ user });
+};
+
+exports.createExpoNotifToken = async function (req, res) {
+  const user = await User.findById(req.session.userId);
+  user.expoPushTokens.push(req.body.token);
+  await user.save();
+  res.sendStatus(200);
+};
+
+exports.removeExpoNotifToken = async function (req, res) {
+  const user = await User.findById(req.session.userId);
+  user.expoPushTokens.pull(req.body.token);
+  await user.save();
+  res.sendStatus(200);
 };
 
 // exports.update = async function(req, res) {

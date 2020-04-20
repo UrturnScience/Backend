@@ -5,20 +5,23 @@ const MessageSchema = new Schema(
   {
     data: {
       type: String,
-      required: true
+      required: true,
     },
     roomId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Room",
-      index: true
+      index: true,
     },
     senderId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
-      index: true
-    }
+      index: true,
+    },
+    system: {
+      type: Boolean,
+    },
   },
   { timestamps: true }
 );

@@ -25,6 +25,8 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "connect-mongo": "^3.2.0",
+    "cron": "^1.8.2",
+    "expo-server-sdk": "^3.5.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-session": "^1.17.0",
@@ -35,7 +37,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "ava": "^3.5.0",
+    "ava": "^3.7.0",
     "dotenv": "^8.2.0",
     "firebase": "^7.11.0",
     "nodemon": "^2.0.2",

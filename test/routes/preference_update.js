@@ -1,6 +1,7 @@
 const test = require("ava");
 const request = require("supertest");
 const { dropDatabase, clearDatabase } = require("../util/database");
+const { setupFirebaseClient } = require("../util/firebase");
 const app = require("../util/app");
 const create_models = require("../util/create_models");
 const PreferenceChecker = require("../util/preference_checker");
@@ -8,7 +9,9 @@ const PreferenceChecker = require("../util/preference_checker");
 const Preference = require("../../src/models/preference.model");
 const RoomUser = require("../../src/models/room_user.model");
 
-test.before(t => {});
+test.before(t => {
+  setupFirebaseClient();
+});
 
 test.after(async t => {
   await dropDatabase();
