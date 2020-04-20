@@ -8,17 +8,15 @@ const BOT_ID = mongoose.Types.ObjectId("000000000000000000000000");
 async function botMessageRoom(roomId, msgObj, isSystemMsg) {
   const message = new Message({
     ...msgObj,
+    system: isSystemMsg,
     senderId: BOT_ID,
     roomId,
   });
   const msgJSON = message.toJSON();
-  if (isSystemMsg) {
-    msgJSON.system = isSystemMsg;
-  }
 
   const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
-  messageUsers("bot", userIds, msgJSON, "-1");
+  messageUsers(isSystemMsg ? "System" : "Roomy Rhino", userIds, msgJSON, "-1");
 
   await message.save();
 }
