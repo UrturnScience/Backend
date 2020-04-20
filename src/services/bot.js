@@ -16,9 +16,15 @@ async function botMessageRoom(roomId, msgObj, isSystemMsg) {
 
   const userIds = await RoomUser.getUserIdsByRoomId(roomId);
 
-  messageUsers(isSystemMsg ? "System" : "Roomy Rhino", userIds, msgJSON, "-1");
-
-  await message.save();
+  await Promise.all([
+    messageUsers(
+      isSystemMsg ? "System" : "Roomy Rhino",
+      userIds,
+      msgJSON,
+      "-1"
+    ),
+    message.save(),
+  ]);
 }
 
 module.exports = { botMessageRoom };

@@ -52,6 +52,8 @@ exports.removeUserFromRoomAndDeletePreferencesAndAssignments = async function (
   userId
 ) {
   //Remove user from room, delete chore preferences and assignments
+  const user = await User.findById(userId);
+  const roomId = await user.getRoomId();
 
   //Since user can only be assigned to one room at a time, we can do it this way
   await Preference.deleteMany({ userId: userId });
@@ -61,10 +63,9 @@ exports.removeUserFromRoomAndDeletePreferencesAndAssignments = async function (
   await RoomUser.deleteOne({ userId: userId });
 
   //notify room that user has left
-  const user = await User.findById(body.uid);
   const firebaseUser = await user.getFirebaseUser();
   const userEmail = await botMessageRoom(
-    body.rid,
+    roomId,
     {
       data: `${firebaseUser.email} left the room.`,
     },
