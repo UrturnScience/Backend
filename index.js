@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const errorMiddleware = require("./src/errorHandling");
 const bodyParser = require("body-parser");
 const cron = require("cron");
+const responseTime = require("response-time");
+const StatsD = require("node-statsd");
 
 require("./src/services/firebaseSetup");
 const { setupDB } = require("./src/services/dbSetup");
@@ -21,6 +23,7 @@ const messageRoutes = require("./src/routes/message.route");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("yamljs").load("./swagger.yaml");
 
+const stats = new StatsD();
 const app = express();
 const sessionParser = session({
   secret: "keyboard cat", // TODO, this secret will probably be handled by Google KMS
@@ -31,6 +34,19 @@ const sessionParser = session({
 });
 app.use(express.static("public"));
 app.use(sessionParser);
+app.use(
+  responseTime((req, _, time) => {
+    const stat = (req.method + req.baseUrl + req.route.path)
+      .toLowerCase()
+      .replace(/[:.]/g, "")
+      .replace(/\//g, "_");
+    stats.timing(stat, time);
+  })
+);
+
+stats.socket.on("error", (err) => {
+  console.error(err.stack);
+});
 
 setupDB().then(() => {
   console.log(

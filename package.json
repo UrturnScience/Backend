@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon -r dotenv/config index.js",
-    "test": "ava --verbose --serial --node-arguments=\"-r dotenv/config\"",
+    "test": "ava --timeout=30s --verbose --serial --node-arguments=\"-r dotenv/config\"",
     "test:coverage": "nyc ava",
     "reset": "npm run reset:db && npm run reset:firebase",
     "reset:db": "node -r dotenv/config ./bin/resetDB",
@@ -32,6 +32,8 @@
     "express-session": "^1.17.0",
     "firebase-admin": "^8.10.0",
     "mongoose": "^5.9.2",
+    "node-statsd": "^0.1.1",
+    "response-time": "^2.3.2",
     "swagger-ui-express": "^4.1.4",
     "ws": "^7.2.3",
     "yamljs": "^0.3.0"
